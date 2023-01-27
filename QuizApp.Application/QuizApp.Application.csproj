@@ -15,4 +15,8 @@
     <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
