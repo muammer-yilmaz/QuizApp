@@ -21,7 +21,7 @@ namespace QuizApp.Persistence.Services
         {
             var user = _mapper.Map<AppUser>(request);
             user.Id = Guid.NewGuid().ToString();
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user,request.Password);
         }
     }
 }

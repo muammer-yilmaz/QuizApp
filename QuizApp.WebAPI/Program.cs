@@ -2,8 +2,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
+using QuizApp.Infrastructure.Authentication;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Services;
 
@@ -11,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<ITokenHandler,TokenHandler>();
+
 
 builder.Services.AddControllers();
 
