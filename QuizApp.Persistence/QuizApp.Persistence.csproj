@@ -22,8 +22,4 @@
     <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

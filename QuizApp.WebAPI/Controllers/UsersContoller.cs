@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
 
@@ -10,7 +11,6 @@ namespace QuizApp.WebAPI.Controllers
         {
 
         }
-
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand request)
         {

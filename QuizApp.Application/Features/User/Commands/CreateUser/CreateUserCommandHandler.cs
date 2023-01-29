@@ -13,8 +13,11 @@ namespace QuizApp.Application.Features.Auth.Command.CreateUser
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            await _userService.CreateAsync(request);
-            return new();
+            var result = await _userService.CreateAsync(request);
+            return new()
+            {
+                success = result 
+            };
         }
     }
 }

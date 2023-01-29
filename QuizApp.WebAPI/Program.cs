@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Services;
@@ -8,13 +9,14 @@ using QuizApp.Domain.Entities.Identity;
 using QuizApp.Infrastructure.Authentication;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
-builder.Services.AddScoped<ITokenHandler,TokenHandler>();
+builder.Services.AddScoped<ITokenHandler,QuizApp.Infrastructure.Authentication.TokenHandler>();
 
 
 builder.Services.AddControllers();
@@ -23,7 +25,6 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 builder.Services.AddIdentity<AppUser,AppRole>(options =>
 {
-    options.Password.RequiredLength = 3;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
@@ -35,6 +36,22 @@ builder.Services.AddMediatR(typeof(QuizApp.Application.AssemblyReference).Assemb
 builder.Services.AddAutoMapper(typeof(QuizApp.Persistence.AssemblyReference).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true, //
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+        };
+    });
 
 builder.Services.AddSwaggerGen(setup =>
 {
@@ -72,6 +89,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

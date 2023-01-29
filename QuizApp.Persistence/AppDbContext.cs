@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Domain.Common;
+using QuizApp.Domain.Entities;
 using QuizApp.Domain.Entities.Identity;
 
 namespace QuizApp.Persistence
@@ -11,6 +12,12 @@ namespace QuizApp.Persistence
         {
 
         }
+
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
