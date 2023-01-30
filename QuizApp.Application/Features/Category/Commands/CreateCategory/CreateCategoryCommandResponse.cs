@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Application.Features.Category.Commands.CreateCategory
 {
-    public class CreateCategoryResponse
+    public class CreateCategoryCommandResponse
     {
         string message = "Kayıt başarılı";
     }

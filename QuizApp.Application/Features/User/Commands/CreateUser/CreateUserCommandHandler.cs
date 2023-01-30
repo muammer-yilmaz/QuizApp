@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using QuizApp.Application.Abstraction.Messaging;
 using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Auth.Command.CreateUser
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserCommandResponse>
+    public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, CreateUserCommandResponse>
     {
         private readonly IUserService _userService;
         public CreateUserCommandHandler(IUserService userService)

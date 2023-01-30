@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using QuizApp.Application.Abstraction.Messaging;
 using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Auth.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
+    public class LoginCommandHandler : ICommandHandler<LoginCommand, LoginCommandResponse>
     {
         private readonly IAuthService _authService;
 

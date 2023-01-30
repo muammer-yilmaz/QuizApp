@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using QuizApp.Application.Abstraction.Messaging;
 
 namespace QuizApp.Application.Features.Auth.Command.CreateUser
 {
@@ -6,5 +6,5 @@ namespace QuizApp.Application.Features.Auth.Command.CreateUser
         string UserName,
         string EMail,
         string Password
-        ) : IRequest<CreateUserCommandResponse>;
+        ) : ICommand<CreateUserCommandResponse>;
 }
