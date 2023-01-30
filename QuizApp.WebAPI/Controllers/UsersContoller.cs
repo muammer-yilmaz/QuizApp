@@ -15,7 +15,6 @@ namespace QuizApp.WebAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand request)
         {
-            throw new Exception("");
             var result = await _mediator.Send(request);
             return Ok(result);
         }
