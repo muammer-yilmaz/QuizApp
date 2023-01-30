@@ -9,6 +9,7 @@ using QuizApp.Domain.Entities.Identity;
 using QuizApp.Infrastructure.Authentication;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Services;
+using QuizApp.WebAPI.Middlewares;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<ITokenHandler,QuizApp.Infrastructure.Authentication.TokenHandler>();
-
+builder.Services.AddScoped<ExceptionMiddleware>();
 
 builder.Services.AddControllers();
 
@@ -38,7 +39,7 @@ builder.Services.AddAutoMapper(typeof(QuizApp.Persistence.AssemblyReference).Ass
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    .AddJwtBearer("admin",options =>
     {
         options.TokenValidationParameters = new()
         {
@@ -91,6 +92,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 
