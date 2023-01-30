@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using QuizApp.Application.Common.Exceptions;
+using System.Text.Json;
 
 namespace QuizApp.WebAPI.Middlewares
 {
@@ -16,25 +17,36 @@ namespace QuizApp.WebAPI.Middlewares
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context , Exception ex)
+        private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)StatusCodes.Status500InternalServerError;
-
-            if (ex.GetType() == typeof(ValidationException))
+            var statusCode = GetStatusCode(exception);
+            var response = new
             {
-                return context.Response.WriteAsync(new ValidationErrorDetails
-                {
-                    Errors = ((ValidationException)ex).Errors.Select(s => s.PropertyName),
-                    StatusCode = context.Response.StatusCode
-                }.ToString());
+                status = statusCode,
+                detail = exception.Message,
+                errors = GetErrors(exception)
+            };
+            httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = statusCode;
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+        private static int GetStatusCode(Exception exception) =>
+            exception switch
+            {
+                //BadRequestException => StatusCodes.Status400BadRequest,
+                //NotFoundException => StatusCodes.Status404NotFound,
+                ValidationException => StatusCodes.Status422UnprocessableEntity,
+                _ => StatusCodes.Status500InternalServerError
+            };
+
+        private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
+        {
+            IReadOnlyDictionary<string, string[]> errors = null;
+            if (exception is ValidationException validationException)
+            {
+                errors = validationException.ErrorsDictionary;
             }
-
-            return context.Response.WriteAsync(new ErrorResult
-            {
-                Message = ex.Message,
-                StatusCode = context.Response.StatusCode
-            }.ToString());
+            return errors;
         }
     }
 }

@@ -1,9 +1,11 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuizApp.Application.Abstraction.Token;
+using QuizApp.Application.Behaviors;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
 using QuizApp.Infrastructure.Authentication;
@@ -11,6 +13,7 @@ using QuizApp.Persistence;
 using QuizApp.Persistence.Services;
 using QuizApp.WebAPI.Middlewares;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,10 @@ builder.Services.AddIdentity<AppUser,AppRole>(options =>
 }).AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddMediatR(typeof(QuizApp.Application.AssemblyReference).Assembly);
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+builder.Services.AddValidatorsFromAssembly(typeof(QuizApp.Application.AssemblyReference).Assembly);
+
 builder.Services.AddAutoMapper(typeof(QuizApp.Persistence.AssemblyReference).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
