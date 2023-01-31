@@ -1,18 +1,21 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Quiz.Commands.CreateQuiz
 {
-    internal class CreateQuizCommandHandler : ICommandHandler<CreateQuizCommand, CreateQuizCommandResponse>
+    public class CreateQuizCommandHandler : ICommandHandler<CreateQuizCommand, CreateQuizCommandResponse>
     {
+        private readonly IQuizService _quizService;
 
-        public Task<CreateQuizCommandResponse> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
+        public CreateQuizCommandHandler(IQuizService quizService)
         {
-            throw new NotImplementedException();
+            _quizService = quizService;
+        }
+
+        public async Task<CreateQuizCommandResponse> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
+        {
+            await _quizService.CreateQuizAsync(request);
+            return new();
         }
     }
 }

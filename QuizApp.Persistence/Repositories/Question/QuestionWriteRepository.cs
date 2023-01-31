@@ -1,8 +1,8 @@
 ﻿using QuizApp.Application.Repositories;
 
-namespace QuizApp.Persistence.Repositories.Question
+namespace QuizApp.Persistence.Repositories
 {
-    public class QuestionWriteRepository : WriteRepository<Domain.Entities.Question>, IWriteRepository<Domain.Entities.Question>
+    public class QuestionWriteRepository : WriteRepository<Domain.Entities.Question>, IQuestionWriteRepository
     {
         public QuestionWriteRepository(AppDbContext context) : base(context)
         {

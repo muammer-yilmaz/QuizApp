@@ -4,6 +4,6 @@ namespace QuizApp.Application.Services
 {
     public interface IQuizService
     {
-        public Task<CreateQuizCommandResponse> CreateQuizAsync(CreateQuizCommand request);
+        public Task CreateQuizAsync(CreateQuizCommand request);
     }
 }

@@ -24,6 +24,7 @@ namespace QuizApp.WebAPI.Middlewares
             {
                 status = statusCode,
                 detail = exception.Message,
+                //inner = exception?.InnerException?.ToString().Split(':'),
                 errors = GetErrors(exception)
             };
             httpContext.Response.ContentType = "application/json";

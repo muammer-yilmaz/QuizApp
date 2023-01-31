@@ -1,8 +1,8 @@
 ﻿using QuizApp.Application.Repositories;
 
-namespace QuizApp.Persistence.Repositories.Option
+namespace QuizApp.Persistence.Repositories
 {
-    public class OptionReadRepository : ReadRepository<Domain.Entities.Option>, IReadRepository<Domain.Entities.Option>
+    public class OptionReadRepository : ReadRepository<Domain.Entities.Option>, IOptionReadRepository
     {
         public OptionReadRepository(AppDbContext context) : base(context)
         {

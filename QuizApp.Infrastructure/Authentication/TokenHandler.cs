@@ -36,6 +36,7 @@ namespace QuizApp.Infrastructure.Authentication
             var claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName,appUser.UserName),
+                new Claim(JwtRegisteredClaimNames.Name, appUser.FirstName ?? "Muammer"),
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
                 new Claim(ClaimTypes.Authentication, appUser.Id),
                 //new Claim(ClaimTypes.Role, String.Join(",", roles))
@@ -62,6 +63,38 @@ namespace QuizApp.Infrastructure.Authentication
 
             //token.RefreshToken = CreateRefreshToken();
             return token;
+        }
+
+        public async Task<JwtSecurityToken> ValidateJwtToken(string token)
+        {
+            if (token == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Token:SecurityKey"]);
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+
+                // return user id from JWT token if validation successful
+                return jwtToken;
+            }
+            catch
+            {
+                // return null if validation fails
+                return null;
+            }
         }
     }
 }

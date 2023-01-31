@@ -1,8 +1,8 @@
 ﻿using QuizApp.Application.Repositories;
 
-namespace QuizApp.Persistence.Repositories.Option
+namespace QuizApp.Persistence.Repositories
 {
-    public class OptionWriteRepository : WriteRepository<Domain.Entities.Option>, IWriteRepository<Domain.Entities.Option>
+    public class OptionWriteRepository : WriteRepository<Domain.Entities.Option>, IOptionWriteRepository
     {
         public OptionWriteRepository(AppDbContext context) : base(context)
         {
