@@ -13,7 +13,6 @@
     <Folder Include="Features\Option\Queries\" />
     <Folder Include="Features\Question\Commands\" />
     <Folder Include="Features\Question\Queries\" />
-    <Folder Include="Features\Quiz\Commands\" />
     <Folder Include="Features\Quiz\Queries\" />
     <Folder Include="Features\User\Queries\" />
   </ItemGroup>
