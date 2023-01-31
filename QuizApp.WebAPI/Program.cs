@@ -8,12 +8,10 @@ using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Behaviors;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
-using QuizApp.Infrastructure.Authentication;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Services;
 using QuizApp.WebAPI.Middlewares;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
