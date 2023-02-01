@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Repositories;
 using QuizApp.Domain.Common;
 
@@ -46,7 +47,7 @@ namespace QuizApp.Persistence.Repositories
                 Table.Remove(result);
                 return true;
             }
-            throw new Exception("Record doesn't exist");
+            throw new NotFoundException("Record doesn't exist");
 
         }
 

@@ -27,6 +27,7 @@ namespace QuizApp.WebAPI.Middlewares
             {
                 status = statusCode,
                 errors = errors,
+                inner = exception.InnerException.Message,
                 error = error,
             };
 

@@ -1,13 +1,6 @@
-using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using QuizApp.Application.Abstraction.Token;
-using QuizApp.Application.Behaviors;
 using QuizApp.WebAPI.Configurations;
 using QuizApp.WebAPI.Middlewares;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
