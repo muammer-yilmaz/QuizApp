@@ -1,5 +1,6 @@
 ﻿using QuizApp.Domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace QuizApp.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace QuizApp.Domain.Entities
     {
         [ForeignKey("Question")]
         public string QuestionId { get; set; }
+        [JsonIgnore]
         public Question Question { get; set; }
         public string Description { get; set; }
         public bool IsAnswer { get; set; }

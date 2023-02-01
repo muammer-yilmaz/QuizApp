@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.Consts;
+using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
@@ -46,6 +47,14 @@ namespace QuizApp.Persistence.Services
         {
             var query = _readRepository.GetAll(false);
             return await query.ToListAsync();
+        }
+
+        public async Task<QuizDetails> GetQuizByIdAsync(string id)
+        {
+            var query = _readRepository.GetWhere(p => p.Id == id);
+            var result = await query.Include(p => p.Questions).ThenInclude(p => p.Options).FirstOrDefaultAsync();
+            var mapped = _mapper.Map<QuizDetails>(result);
+            return mapped;
         }
     }
 }

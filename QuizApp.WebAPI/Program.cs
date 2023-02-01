@@ -1,6 +1,7 @@
 using QuizApp.Application.Abstraction.Token;
 using QuizApp.WebAPI.Configurations;
 using QuizApp.WebAPI.Middlewares;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,10 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddAplicationServices();
 builder.Services.AddApiServices(builder.Configuration);
 
-builder.Services.AddScoped<ITokenHandler,QuizApp.Infrastructure.Authentication.TokenHandler>();
+builder.Services.AddScoped<ITokenHandler, QuizApp.Infrastructure.Authentication.TokenHandler>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddEndpointsApiExplorer();
 

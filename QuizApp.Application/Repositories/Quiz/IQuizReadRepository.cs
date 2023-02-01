@@ -4,5 +4,6 @@ namespace QuizApp.Application.Repositories
 {
     public interface IQuizReadRepository : IReadRepository<Quiz>
     {
+        public void GetQuiz();
     }
 }

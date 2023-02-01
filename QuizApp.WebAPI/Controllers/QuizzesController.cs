@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
+using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
 
 namespace QuizApp.WebAPI.Controllers
 {
@@ -17,6 +18,12 @@ namespace QuizApp.WebAPI.Controllers
         public async Task<IActionResult> GetAll([FromQuery] GetAllQuizzesQuery query)
         {
             var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetQuizDetails([FromQuery] GetQuizDetailsQuery request)
+        {
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Domain.Entities;
@@ -12,6 +13,9 @@ namespace QuizApp.Persistence.Mapping
         {
             CreateMap<CreateUserCommand, AppUser>().ReverseMap();
             CreateMap<CreateQuizCommand, Quiz>();
+            CreateMap<QuizDetails, Quiz>().ReverseMap();
+            CreateMap<QuestionsDto, Question>().ReverseMap();
+            CreateMap<OptionsDto, Option>().ReverseMap();
         }
     }
 }
