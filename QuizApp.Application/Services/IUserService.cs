@@ -4,6 +4,6 @@ namespace QuizApp.Application.Services
 {
     public interface IUserService
     {
-        Task<string> CreateAsync(CreateUserCommand request);
+        Task CreateAsync(CreateUserCommand request);
     }
 }

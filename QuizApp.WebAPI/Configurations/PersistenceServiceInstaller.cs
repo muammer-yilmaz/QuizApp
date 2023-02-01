@@ -26,6 +26,8 @@ namespace QuizApp.WebAPI.Configurations
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<AppDbContext>();
 
+            services.AddAutoMapper(typeof(AssemblyReference).Assembly);
+
             services.AddScoped<IQuizWriteRepository, QuizWriteRepository>();
             services.AddScoped<IQuizReadRepository, QuizReadRepository>();
 

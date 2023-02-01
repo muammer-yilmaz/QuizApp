@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using QuizApp.Application.Common.Consts;
+using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
@@ -18,17 +20,33 @@ namespace QuizApp.Persistence.Services
             _mapper = mapper;
         }
 
-        public async Task<string> CreateAsync(CreateUserCommand request)
+        public async Task CreateAsync(CreateUserCommand request)
         {
+            await CheckIfEmailRegistered(request.EMail);
+            await CheckIfUserNameRegistered(request.UserName);
+
             var user = _mapper.Map<AppUser>(request);
             user.Id = Guid.NewGuid().ToString();
             var result = await _userManager.CreateAsync(user,request.Password);
-            StringBuilder sb = new();
-            foreach (var item in result.Errors)
-            {
-                sb.AppendLine(item.Description);
-            }
-            return sb.ToString();
         }
+
+        private async Task CheckIfEmailRegistered(string email)
+        {
+            var result = await _userManager.FindByEmailAsync(email);
+            if(result != null)
+            {
+                throw new BusinessException(Messages.EmailDuplicated);
+            }
+        }
+
+        private async Task CheckIfUserNameRegistered(string userName)
+        {
+            var result = await _userManager.FindByNameAsync(userName);
+            if( result != null )
+            {
+                throw new BusinessException(Messages.UserNameDuplicated);
+            }
+        }
+
     }
 }
