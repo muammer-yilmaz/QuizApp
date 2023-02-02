@@ -23,14 +23,20 @@ namespace QuizApp.Persistence
         {
             var entries = ChangeTracker.Entries<BaseEntity>();
 
-            foreach(var entry in entries)
+            foreach (var entry in entries)
             {
-                _ = entry.State switch
+                switch(entry.State)
                 {
-                    EntityState.Added => entry.Entity.CreatedDate = DateTime.UtcNow,
-                    EntityState.Modified => entry.Entity.UpdatedDate = DateTime.UtcNow,
-                    _ => DateTime.UtcNow
-                };
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
+                        entry.Entity.Id = Guid.NewGuid().ToString();
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedDate = DateTime.UtcNow;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             return base.SaveChangesAsync(cancellationToken);

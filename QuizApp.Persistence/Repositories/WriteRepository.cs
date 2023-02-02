@@ -57,12 +57,11 @@ namespace QuizApp.Persistence.Repositories
             return true;
         }
 
-        public async Task<int> SaveAsync() => await _context.SaveChangesAsync();
-
         public bool Update(T model)
         {
             var result = Table.Update(model);
             return result.State == EntityState.Modified;
         }
+        public async Task<int> SaveAsync() => await _context.SaveChangesAsync();
     }
 }

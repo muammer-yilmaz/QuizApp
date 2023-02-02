@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
+using QuizApp.Application.Features.Category.Commands.CreateCategory;
+using QuizApp.Application.Features.Option.Commands.CreateOption;
+using QuizApp.Application.Features.Option.Commands.UpdateOption;
+using QuizApp.Application.Features.Question.Commands.CreateQuestion;
+using QuizApp.Application.Features.Question.Commands.UpdateQuestion;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Entities.Identity;
@@ -12,10 +17,21 @@ namespace QuizApp.Persistence.Mapping
         public MappingProfile()
         {
             CreateMap<CreateUserCommand, AppUser>().ReverseMap();
-            CreateMap<CreateQuizCommand, Quiz>();
+
             CreateMap<QuizDetails, Quiz>().ReverseMap();
             CreateMap<QuestionsDto, Question>().ReverseMap();
             CreateMap<OptionsDto, Option>().ReverseMap();
+
+            CreateMap<CreateQuizCommand, Quiz>();
+
+            CreateMap<CreateCategoryCommand, Category>();
+
+            CreateMap<CreateQuestionCommand, Question>();
+            CreateMap<UpdateQuestionCommand, Question>();
+
+            CreateMap<CreateOptionCommand, Option>();
+            CreateMap<UpdateOptionCommand, Option>();
+
         }
     }
 }
