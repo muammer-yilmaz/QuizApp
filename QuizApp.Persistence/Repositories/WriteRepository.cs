@@ -18,6 +18,7 @@ namespace QuizApp.Persistence.Repositories
 
         public async Task<bool> AddAsync(T model)
         {
+            model.Id = Guid.NewGuid().ToString();
             var result = await Table.AddAsync(model);
             return result.State == EntityState.Added;
         }

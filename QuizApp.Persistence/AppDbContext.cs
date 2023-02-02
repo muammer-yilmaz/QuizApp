@@ -29,7 +29,7 @@ namespace QuizApp.Persistence
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedDate = DateTime.UtcNow;
-                        entry.Entity.Id = Guid.NewGuid().ToString();
+                        //entry.Entity.Id = Guid.NewGuid().ToString();
                         break;
                     case EntityState.Modified:
                         entry.Entity.UpdatedDate = DateTime.UtcNow;

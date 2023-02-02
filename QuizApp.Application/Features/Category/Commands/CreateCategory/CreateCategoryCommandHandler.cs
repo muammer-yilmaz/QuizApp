@@ -1,13 +1,21 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
+using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Category.Commands.CreateCategory
 {
-    internal class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResponse>
+    public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResponse>
     {
+        private readonly ICategoryService _categoryService;
 
-        public Task<CreateCategoryCommandResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public CreateCategoryCommandHandler(ICategoryService categoryService)
         {
-            throw new NotImplementedException();
+            _categoryService = categoryService;
+        }
+
+        public async Task<CreateCategoryCommandResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        {
+            await _categoryService.CreateCategory(request);
+            return new();
         }
     }
 }

@@ -1,12 +1,21 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
+using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Option.Commands.UpdateOption
 {
     public class UpdateOptionCommandHandler : ICommandHandler<UpdateOptionCommand, UpdateOptionCommandResponse>
     {
-        public Task<UpdateOptionCommandResponse> Handle(UpdateOptionCommand request, CancellationToken cancellationToken)
+        private readonly IOptionService _optionService;
+
+        public UpdateOptionCommandHandler(IOptionService optionService)
         {
-            throw new NotImplementedException();
+            _optionService = optionService;
+        }
+
+        public async Task<UpdateOptionCommandResponse> Handle(UpdateOptionCommand request, CancellationToken cancellationToken)
+        {
+            await _optionService.UpdateOption(request);
+            return new();
         }
     }
 }

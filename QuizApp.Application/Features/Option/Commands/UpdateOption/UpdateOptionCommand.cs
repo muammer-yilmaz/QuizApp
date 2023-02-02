@@ -5,6 +5,6 @@ namespace QuizApp.Application.Features.Option.Commands.UpdateOption
     public sealed record UpdateOptionCommand(
         string Id,
         string Description,
-        string isAnswer
+        bool isAnswer
         ) : ICommand<UpdateOptionCommandResponse>;
 }

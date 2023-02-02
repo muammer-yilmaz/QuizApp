@@ -1,12 +1,21 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
+using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Question.Commands.DeleteQuestion
 {
     public class DeleteQuestionCommandHandler : ICommandHandler<DeleteQuestionCommand, DeleteQuestionCommandResponse>
     {
-        public Task<DeleteQuestionCommandResponse> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
+        private readonly IQuestionService _questionService;
+
+        public DeleteQuestionCommandHandler(IQuestionService questionService)
         {
-            throw new NotImplementedException();
+            _questionService = questionService;
+        }
+
+        public async Task<DeleteQuestionCommandResponse> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
+        {
+            await _questionService.DeleteQuestion(request);
+            return new();
         }
     }
 }

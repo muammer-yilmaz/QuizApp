@@ -31,10 +31,21 @@ namespace QuizApp.WebAPI.Configurations
             services.AddScoped<IQuizWriteRepository, QuizWriteRepository>();
             services.AddScoped<IQuizReadRepository, QuizReadRepository>();
 
+            services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
+            services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
+
+            services.AddScoped<IQuestionWriteRepository, QuestionWriteRepository>();
+            services.AddScoped<IQuestionReadRepository, QuestionReadRepository>();
+
+            services.AddScoped<IOptionWriteRepository, OptionWriteRepository>();
+            services.AddScoped<IOptionReadRepository, OptionReadRepository>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IOptionService, OptionService>();
         }
     }
 }

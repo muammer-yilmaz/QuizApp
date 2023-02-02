@@ -13,8 +13,8 @@ namespace QuizApp.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginCommand request)
         {
-            var result = await _mediator.Send(request);
-            return Ok(result);
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
     }
 }

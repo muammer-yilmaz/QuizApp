@@ -2,7 +2,7 @@
 
 namespace QuizApp.Application.Features.Quiz.Commands.CreateQuiz
 {
-    public sealed record CreateQuizCommandResponse(string message = Messages.QuizAdded)
+    public sealed record CreateQuizCommandResponse(string Message = Messages.QuizAdded)
     {
     }
 }

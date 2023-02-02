@@ -13,10 +13,10 @@ namespace QuizApp.WebAPI.Controllers
         }
         //[Authorize(AuthenticationSchemes = "Admin")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand request)
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
         {
-            var result = await _mediator.Send(request);
-            return Ok(result);
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
     }
 }

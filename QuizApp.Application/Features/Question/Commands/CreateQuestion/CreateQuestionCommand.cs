@@ -2,7 +2,9 @@
 
 namespace QuizApp.Application.Features.Question.Commands.CreateQuestion
 {
-    public sealed record CreateQuestionCommand : ICommand<CreateQuestionCommandResponse>
-    {
-    }
+    public sealed record CreateQuestionCommand(
+        string QuizId,
+        string Title,
+        string Description
+        ) : ICommand<CreateQuestionCommandResponse>;
 }
