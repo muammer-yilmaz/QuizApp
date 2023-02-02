@@ -1,7 +1,9 @@
-﻿namespace QuizApp.Application.Features.Category.Commands.CreateCategory
+﻿using QuizApp.Application.Common.Consts;
+
+namespace QuizApp.Application.Features.Category.Commands.CreateCategory
 {
     public class CreateCategoryCommandResponse
     {
-        string message = "Kayıt başarılı";
+        string Message = Messages.CreateSuccessful("Category");
     }
 }
