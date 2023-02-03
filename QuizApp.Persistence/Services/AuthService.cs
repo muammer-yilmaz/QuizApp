@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using QuizApp.Application.Abstraction.Token;
+using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
+using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Auth.Commands.Login;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
@@ -27,7 +29,7 @@ namespace QuizApp.Persistence.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
             if(user == null)
             {
-                throw new Exception("Kullanıcı bulunamadı");
+                throw new NotFoundException(Messages.NotFound("User"));
             }
 
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password,false);
@@ -38,7 +40,7 @@ namespace QuizApp.Persistence.Services
                 return token;
             }
 
-            throw new Exception("");
+            throw new AuthorizationException(Messages.PasswordMismatch);
 
         }
     }

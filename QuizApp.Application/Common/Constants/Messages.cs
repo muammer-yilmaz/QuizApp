@@ -12,5 +12,6 @@ namespace QuizApp.Application.Common.Consts
         public const string QuestionOptionMaxed = "A Question can have a maximum of 4 options.";
         public const string QuestionOptionAllFalse = "The question must have at least one correct answer.";
         public const string AddFailure = "Add operation failed.";
+        public const string PasswordMismatch = "Password does not match.";
     }
 }
