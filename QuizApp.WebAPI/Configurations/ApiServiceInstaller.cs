@@ -56,6 +56,10 @@ namespace QuizApp.WebAPI.Configurations
                 });
             });
 
+            services.AddCors(builder =>
+                builder.AddDefaultPolicy(configure =>
+                    configure.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
         }
     }
 }

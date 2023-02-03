@@ -39,17 +39,18 @@ namespace QuizApp.Persistence.Services
 
         public async Task UpdateQuestion(UpdateQuestionCommand request)
         {
-            await CheckIfQuestionExists(request.Id);
-            var mapped = _mapper.Map<Question>(request);
+            var question = await CheckIfQuestionExists(request.Id);
+            var mapped = _mapper.Map(request,question);
             _writeRepository.Update(mapped);
             await _writeRepository.SaveAsync();
         }
 
-        private async Task CheckIfQuestionExists(string id)
+        private async Task<Question> CheckIfQuestionExists(string id)
         {
-            var result = await _readRepository.GetSingleAsync(x => x.Id == id);
+            var result = await _readRepository.GetByIdAsync(id);
             if (result == null)
                 throw new NotFoundException(Messages.NotFound("Question"));
+            return result;
         }
     }
 }

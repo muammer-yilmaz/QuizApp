@@ -2,7 +2,9 @@
 
 namespace QuizApp.Application.Features.Auth.Command.CreateUser
 {
-    public sealed record CreateUserCommandResponse(
-        string Success = Messages.CreateUserSuccessful);
+    public sealed record CreateUserCommandResponse
+    {
+        public string Message { get; } = Messages.CreateSuccessful("User"); 
+    }
 
 }

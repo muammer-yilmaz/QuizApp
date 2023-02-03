@@ -35,7 +35,7 @@ namespace QuizApp.Persistence.Services
             var result = await _userManager.FindByEmailAsync(email);
             if(result != null)
             {
-                throw new BusinessException(Messages.EmailDuplicated);
+                throw new BusinessException(Messages.DuplicateObject("Email"));
             }
         }
 
@@ -44,7 +44,7 @@ namespace QuizApp.Persistence.Services
             var result = await _userManager.FindByNameAsync(userName);
             if( result != null )
             {
-                throw new BusinessException(Messages.UserNameDuplicated);
+                throw new BusinessException(Messages.DuplicateObject("Username"));
             }
         }
 

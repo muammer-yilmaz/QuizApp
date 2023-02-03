@@ -4,6 +4,6 @@ namespace QuizApp.Application.Features.Question.Commands.UpdateQuestion
 {
     public sealed record UpdateQuestionCommandResponse()
     {
-        string Message = Messages.UpdateSuccessful("Question");
-    };
+        public string Message { get; } = Messages.UpdateSuccessful("Question");
+    }
 }

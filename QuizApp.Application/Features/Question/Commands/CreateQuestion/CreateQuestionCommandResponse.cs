@@ -4,6 +4,6 @@ namespace QuizApp.Application.Features.Question.Commands.CreateQuestion
 {
     public sealed record CreateQuestionCommandResponse()
     {
-        string Message = Messages.CreateSuccessful("Question");
-    };
+       public string Message { get; } = Messages.CreateSuccessful("Question");
+    }
 }

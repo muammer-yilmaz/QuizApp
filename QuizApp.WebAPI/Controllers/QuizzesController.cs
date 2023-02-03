@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
+using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
 
@@ -39,6 +40,13 @@ namespace QuizApp.WebAPI.Controllers
             var request = new DeleteQuizCommand(id);
             await _mediator.Send(request);
             return NoContent();
+        }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Update([FromBody] UpdateQuizCommand request)
+        {
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
     }
 }

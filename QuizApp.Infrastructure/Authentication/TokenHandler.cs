@@ -65,7 +65,7 @@ namespace QuizApp.Infrastructure.Authentication
             return token;
         }
 
-        public async Task<JwtSecurityToken> ValidateJwtToken(string token)
+        public JwtSecurityToken ValidateJwtToken(string token)
         {
             if (token == null)
                 return null;

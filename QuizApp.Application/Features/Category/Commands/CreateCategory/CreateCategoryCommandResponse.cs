@@ -2,8 +2,9 @@
 
 namespace QuizApp.Application.Features.Category.Commands.CreateCategory
 {
-    public class CreateCategoryCommandResponse
+    public sealed record CreateCategoryCommandResponse
     {
-        string Message = Messages.CreateSuccessful("Category");
+        public string Message {get;} = Messages.CreateSuccessful("Category"); 
     }
+    
 }

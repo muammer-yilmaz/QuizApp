@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
+using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
+using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
@@ -43,6 +45,14 @@ namespace QuizApp.Persistence.Services
             await _writeRepository.SaveAsync();
         }
 
+        public async Task UpdateQuizAsync(UpdateQuizCommand request)
+        {
+            var quiz = await CheckIfQuizNotExists(request.Id);
+            var mapped = _mapper.Map(request, quiz);
+            _writeRepository.Update(mapped);
+            await _writeRepository.SaveAsync();
+        }
+
         public async Task<List<Quiz>> GetAllQuizzesAsync()
         {
             var query = _readRepository.GetAll(false);
@@ -55,6 +65,14 @@ namespace QuizApp.Persistence.Services
             var result = await query.Include(p => p.Questions).ThenInclude(p => p.Options).FirstOrDefaultAsync();
             var mapped = _mapper.Map<QuizDetails>(result);
             return mapped;
+        }
+
+        private async Task<Quiz> CheckIfQuizNotExists(string quizId)
+        {
+            var result = await _readRepository.GetByIdAsync(quizId);
+            if (result == null)
+                throw new NotFoundException(Messages.NotFound("Quiz"));
+            return result;
         }
     }
 }

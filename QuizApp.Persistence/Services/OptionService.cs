@@ -41,9 +41,9 @@ namespace QuizApp.Persistence.Services
 
         public async Task UpdateOption(UpdateOptionCommand request)
         {
-            await CheckIfOptionExists(request.Id);
-            await CheckIfAllOptionsFalse(request.Id);
-            var mapped = _mapper.Map<Option>(request);
+            var option = await CheckIfOptionExists(request.Id);
+            //await CheckIfAllOptionsFalse(request.Id);
+            var mapped = _mapper.Map(request,option);
             _writeRepository.Update(mapped);
             await _writeRepository.SaveAsync();
         }
@@ -56,11 +56,12 @@ namespace QuizApp.Persistence.Services
                 throw new BusinessException(Messages.QuestionOptionMaxed);
         }
 
-        private async Task CheckIfOptionExists(string id)
+        private async Task<Option> CheckIfOptionExists(string id)
         {
-            var result = await _readRepository.GetSingleAsync(x => x.Id == id);
+            var result = await _readRepository.GetByIdAsync(id);
             if (result == null)
                 throw new NotFoundException(Messages.NotFound("Option"));
+            return result;
         }
 
         private async Task CheckIfAllOptionsFalse(string id)

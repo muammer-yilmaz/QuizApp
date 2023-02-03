@@ -50,7 +50,7 @@ namespace QuizApp.WebAPI.Middlewares
 
         private static IReadOnlyDictionary<string, string[]> GetValidationErrors(Exception exception)
         {
-            IReadOnlyDictionary<string, string[]> errors = null;
+            IReadOnlyDictionary<string, string[]> errors = null!;
             if (exception is ValidationException validationException)
             {
                 errors = validationException.ErrorsDictionary;

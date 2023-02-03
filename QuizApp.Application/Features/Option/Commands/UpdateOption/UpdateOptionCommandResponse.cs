@@ -4,7 +4,7 @@ namespace QuizApp.Application.Features.Option.Commands.UpdateOption
 {
     public sealed record UpdateOptionCommandResponse()
     {
-        string Message = Messages.UpdateSuccessful("Option");
+        public string Message { get; } = Messages.UpdateSuccessful("Option");
     };
 
 }
