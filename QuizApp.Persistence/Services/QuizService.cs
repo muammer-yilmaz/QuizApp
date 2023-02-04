@@ -9,6 +9,7 @@ using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
+using System.Security.Claims;
 
 namespace QuizApp.Persistence.Services
 {
@@ -32,7 +33,7 @@ namespace QuizApp.Persistence.Services
             var mappedQuiz = _mapper.Map<Quiz>(request);
             mappedQuiz.Id = Guid.NewGuid().ToString();
             mappedQuiz.UserId = request.UserId;
-            //mappedQuiz.UserId = _httpContext?.HttpContext?.User?.FindFirst(ClaimTypes.Authentication)?.Value;
+            var smth = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication);
             var result = await _writeRepository.AddAsync(mappedQuiz);
             if (!result)
                 throw new Exception(Messages.AddFailure);

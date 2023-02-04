@@ -13,5 +13,6 @@ namespace QuizApp.Application.Common.Consts
         public const string QuestionOptionAllFalse = "The question must have at least one correct answer.";
         public const string AddFailure = "Add operation failed.";
         public const string PasswordMismatch = "Password does not match.";
+        public const string EmailNotConfirmed = "Email is not confirmed.";
     }
 }

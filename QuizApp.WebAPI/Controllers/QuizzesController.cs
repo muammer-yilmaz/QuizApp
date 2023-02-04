@@ -27,7 +27,7 @@ namespace QuizApp.WebAPI.Controllers
             var response = await _mediator.Send(request);
             return Ok(response);
         }
-
+        //[Authorize]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] CreateQuizCommand request)
         {

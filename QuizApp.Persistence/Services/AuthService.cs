@@ -39,6 +39,10 @@ namespace QuizApp.Persistence.Services
                 Token token = _tokenHandler.CreateToken(user);
                 return token;
             }
+            //else if(result.IsNotAllowed && !user.EmailConfirmed)
+            //{
+            //    throw new AuthorizationException(Messages.EmailNotConfirmed);
+            //}
 
             throw new AuthorizationException(Messages.PasswordMismatch);
 

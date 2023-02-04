@@ -9,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddAplicationServices();
 builder.Services.AddApiServices(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddScoped<ITokenHandler, QuizApp.Infrastructure.Authentication.TokenHandler>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
@@ -35,7 +35,6 @@ app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 
 //app.UseMiddleware<AuthenticationMiddleware>();
-
 app.UseAuthentication();
 
 app.UseAuthorization();

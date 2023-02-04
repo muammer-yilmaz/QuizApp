@@ -11,16 +11,20 @@ namespace QuizApp.WebAPI.Configurations
         public static void AddApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ExceptionMiddleware>();
-            services.AddScoped<AuthenticationMiddleware>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new()
                     {
                         ValidateAudience = false,
                         ValidateIssuer = false,
-                        ValidateLifetime = false,
+                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
                         //ValidAudience = builder.Configuration["Token:Audience"],
@@ -29,6 +33,8 @@ namespace QuizApp.WebAPI.Configurations
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Token:SecurityKey").Value)),
                     };
                 });
+
+            services.AddAuthorization();
 
             services.AddSwaggerGen(setup =>
             {

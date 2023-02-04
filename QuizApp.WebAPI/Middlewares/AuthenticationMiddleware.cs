@@ -19,9 +19,9 @@ namespace QuizApp.WebAPI.Middlewares
             if (jwt == null)
                 throw new Exception("Doğrulama başarısız");
 
-            var token = _tokenHandler.ValidateJwtToken(jwt);
+            //var token = _tokenHandler.ValidateJwtToken(jwt);
 
-            context.Items["User"] = token;
+            //context.Items["User"] = token;
 
             await next(context);
         }

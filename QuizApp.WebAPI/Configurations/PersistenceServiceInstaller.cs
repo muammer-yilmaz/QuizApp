@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
-using QuizApp.Domain.Entities;
 using QuizApp.Domain.Entities.Identity;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Repositories;
@@ -16,7 +16,7 @@ namespace QuizApp.WebAPI.Configurations
 
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("SqlServer")));
-            
+
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
@@ -24,7 +24,9 @@ namespace QuizApp.WebAPI.Configurations
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<AppDbContext>();
+                //options.SignIn.RequireConfirmedEmail = true;
+            }).AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddAutoMapper(typeof(AssemblyReference).Assembly);
 
