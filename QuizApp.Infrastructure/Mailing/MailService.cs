@@ -14,21 +14,36 @@ namespace QuizApp.Infrastructure.Mailing
             _emailConfiguration = emailConfiguration;
         }
 
-        public async Task SendEmailAsync(EmailMessage message)
+        private async Task SendEmailAsync(MimeMessage mail)
         {
-            var mail = new MimeMessage();
-            mail.From.Add(new MailboxAddress("Denmee", _emailConfiguration.Username + "@yandex.com"));
-            mail.To.Add(MailboxAddress.Parse(message.To));
-            mail.Subject = message.Subject;
-            mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
-                Text =  $"This is your confirm code <br> {message.Body} "
-            };
+            //var mail = new MimeMessage();
+            //mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));
+            //mail.To.Add(MailboxAddress.Parse(message.To));
+            //mail.Subject = message.Subject;
+            //mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            //{
+            //    Text =  $"This is your confirm code <br> {message.Body} "
+            //};
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_emailConfiguration.Host, 587, MailKit.Security.SecureSocketOptions.StartTls);
+            await smtp.ConnectAsync(_emailConfiguration.Host, _emailConfiguration.Port, MailKit.Security.SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_emailConfiguration.Username,_emailConfiguration.Password);
             await smtp.SendAsync(mail);
             await smtp.DisconnectAsync(true);
+
+        }
+
+        public async Task SendEmailConfirmationMail(EmailRequest request , string token)
+        {
+            var mail = new MimeMessage();
+            mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));
+            mail.To.Add(MailboxAddress.Parse(request.To));
+            mail.Subject = request.Subject;
+            mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = request.Body.Replace("|", token)
+            };
+
+            await SendEmailAsync(mail);
 
         }
     }

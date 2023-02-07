@@ -8,6 +8,7 @@ using QuizApp.Application.Features.Question.Commands.CreateQuestion;
 using QuizApp.Application.Features.Question.Commands.UpdateQuestion;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
+using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Entities.Identity;
 
@@ -22,6 +23,8 @@ namespace QuizApp.Persistence.Mapping
             CreateMap<QuizDetails, Quiz>().ReverseMap();
             CreateMap<QuestionsDto, Question>().ReverseMap();
             CreateMap<OptionsDto, Option>().ReverseMap();
+
+            CreateMap<AppUser, GetUserQueryResponse>();
 
             CreateMap<CreateQuizCommand, Quiz>();
             CreateMap<UpdateQuizCommand, Quiz>();

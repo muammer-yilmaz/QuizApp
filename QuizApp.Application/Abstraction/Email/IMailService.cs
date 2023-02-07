@@ -4,6 +4,6 @@ namespace QuizApp.Application.Abstraction.Email
 {
     public interface IMailService
     {
-        Task SendEmailAsync(EmailMessage message);
+        Task SendEmailConfirmationMail(EmailRequest request, string token);
     }
 }

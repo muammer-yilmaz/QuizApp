@@ -3,7 +3,7 @@ using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Quiz.Queries.GetQuizDetails
 {
-    public class GetQuizDetailsQueryHandler : IQueryHander<GetQuizDetailsQuery, GetQuizDetailsQueryResponse>
+    public class GetQuizDetailsQueryHandler : IQueryHandler<GetQuizDetailsQuery, GetQuizDetailsQueryResponse>
     {
         private readonly IQuizService _quizService;
 
