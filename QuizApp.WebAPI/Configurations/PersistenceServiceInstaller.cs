@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
@@ -29,6 +30,7 @@ namespace QuizApp.WebAPI.Configurations
             .AddDefaultTokenProviders();
 
             services.AddAutoMapper(typeof(AssemblyReference).Assembly);
+            services.AddHttpContextAccessor();
 
             services.AddScoped<IQuizWriteRepository, QuizWriteRepository>();
             services.AddScoped<IQuizReadRepository, QuizReadRepository>();

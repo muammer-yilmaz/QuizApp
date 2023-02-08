@@ -14,7 +14,7 @@ namespace QuizApp.Application.Common.Consts
         public const string AddFailure = "Add operation failed.";
         public const string PasswordMismatch = "Password does not match.";
         public const string EmailNotConfirmed = "Email is not confirmed.";
-
+        public const string NoAuth = "You are not authorized.";
 
         public const string EmailMessage = @"
 <!DOCTYPE html>

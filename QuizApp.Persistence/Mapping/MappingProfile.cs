@@ -20,7 +20,9 @@ namespace QuizApp.Persistence.Mapping
         public MappingProfile()
         {
             CreateMap<CreateUserCommand, AppUser>().ReverseMap();
-            CreateMap<UpdateProfileCommand, AppUser>();
+            CreateMap<UpdateProfileCommand, AppUser>().ReverseMap()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
 
             CreateMap<QuizDetails, Quiz>().ReverseMap();
             CreateMap<QuestionsDto, Question>().ReverseMap();

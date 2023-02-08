@@ -20,7 +20,8 @@ namespace QuizApp.WebAPI.Middlewares
         private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
             var statusCode = GetStatusCode(exception);
-            var errors = exception is ValidationException ? GetValidationErrors(exception) : null;
+            object errors = GetValidationErrors(exception);
+
             var error = exception.Message;
 
             var response = new
@@ -41,21 +42,24 @@ namespace QuizApp.WebAPI.Middlewares
         private static int GetStatusCode(Exception exception) =>
             exception switch
             {
-                BusinessException => StatusCodes.Status400BadRequest,
+                BusinessException or IdentityException => StatusCodes.Status400BadRequest,
                 AuthorizationException => StatusCodes.Status401Unauthorized,
                 NotFoundException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status422UnprocessableEntity,
                 _ => StatusCodes.Status500InternalServerError
             };
 
-        private static IReadOnlyDictionary<string, string[]> GetValidationErrors(Exception exception)
+        private static object GetValidationErrors(Exception exception)
         {
-            IReadOnlyDictionary<string, string[]> errors = null!;
             if (exception is ValidationException validationException)
             {
-                errors = validationException.ErrorsDictionary;
+                return validationException.ErrorsDictionary;
             }
-            return errors;
+            else if (exception is IdentityException identityException)
+            {
+                return identityException.Errors;
+            }
+            return null;
         }
     }
 }

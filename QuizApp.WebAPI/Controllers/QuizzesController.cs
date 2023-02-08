@@ -16,8 +16,9 @@ namespace QuizApp.WebAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllQuizzesQuery query)
+        public async Task<IActionResult> GetAll()
         {
+            GetAllQuizzesQuery query = new();
             var response = await _mediator.Send(query);
             return Ok(response);
         }

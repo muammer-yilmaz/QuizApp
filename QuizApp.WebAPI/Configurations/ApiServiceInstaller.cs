@@ -22,15 +22,28 @@ namespace QuizApp.WebAPI.Configurations
                 {
                     options.TokenValidationParameters = new()
                     {
-                        ValidateAudience = false,
-                        ValidateIssuer = false,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
-                        //ValidAudience = builder.Configuration["Token:Audience"],
-                        //ValidIssuer = builder.Configuration["Token:Issuer"],
-                        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+                        ValidAudience = configuration["Token:Audience"],
+                        ValidIssuer = configuration["Token:Issuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Token:SecurityKey").Value)),
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = context =>
+                        {
+                            context.Response.OnStarting(async () =>
+                            {
+                                context.Response.StatusCode = 401;
+                                context.Response.ContentType = "application/json";
+                                await context.Response.WriteAsync("{\"Message\" : \"You are not authorized! Please login to your account.\"}");
+                            });
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
@@ -53,6 +66,8 @@ namespace QuizApp.WebAPI.Configurations
                         Type = ReferenceType.SecurityScheme
                     }
                 };
+
+                setup.EnableAnnotations();
 
                 setup.AddSecurityDefinition(jwtSecuritySheme.Reference.Id, jwtSecuritySheme);
 
