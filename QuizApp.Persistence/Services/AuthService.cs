@@ -3,9 +3,11 @@ using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
+using QuizApp.Application.Features.Auth.Commands.ConfirmMail;
 using QuizApp.Application.Features.Auth.Commands.Login;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
+using System.Net;
 
 namespace QuizApp.Persistence.Services
 {
@@ -22,6 +24,22 @@ namespace QuizApp.Persistence.Services
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenHandler = tokenHandler;
+        }
+
+        public async Task ConfirmMail(ConfirmMailCommand request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Mail);
+            if(user == null)
+            {
+                throw new NotFoundException(Messages.NotFound("Email"));
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+            if(result.Succeeded)
+            {
+                return;
+            }
+            var errors = result.Errors.ToDictionary(x => x.Code, x => x.Description);
+            throw new IdentityException(errors);
         }
 
         public async Task<Token> LoginAsync(LoginCommand request)

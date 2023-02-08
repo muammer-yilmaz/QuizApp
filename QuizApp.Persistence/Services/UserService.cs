@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Abstraction.Email;
+using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
@@ -13,9 +14,8 @@ using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
-using System.Net.Http;
+using System.Net;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 
 namespace QuizApp.Persistence.Services
 {
@@ -43,10 +43,10 @@ namespace QuizApp.Persistence.Services
             var user = _mapper.Map<AppUser>(request);
             user.Id = Guid.NewGuid().ToString();
             var result = await _userManager.CreateAsync(user, request.Password);
-            //if (result.Succeeded)
-            //{
-            //await SendConfirmationEmail(user);
-            //}
+            if (result.Succeeded)
+            {
+                //await SendConfirmationEmail(user);
+            }
 
         }
 
@@ -74,13 +74,14 @@ namespace QuizApp.Persistence.Services
         private async Task SendConfirmationEmail(AppUser user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encoded = WebUtility.UrlEncode(token);
             EmailRequest request = new()
             {
                 To = user.Email,
                 Subject = "Confirm Email",
-                Body = Messages.EmailMessage
+                Body = EmailTemplates.ConfirmEmailMessage
             };
-            await _mailService.SendEmailConfirmationMail(request, token);
+            await _mailService.SendEmailConfirmationMail(request, encoded);
         }
 
         private async Task CheckIfEmailRegistered(string email)
