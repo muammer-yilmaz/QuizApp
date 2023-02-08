@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
+using QuizApp.Application.Features.User.Commands.UpdateProfile;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 
@@ -34,5 +35,12 @@ namespace QuizApp.WebAPI.Controllers
             var response = await _mediator.Send(new GetAllUsersQuery());
             return Ok(response);
         }
+
+        //[HttpPut("update-profile")]
+        //public async Task<IActionResult> UpdateProfile(UpdateProfileCommand request)
+        //{
+        //    var response = await _mediator.Send(request);
+        //    return Ok(response);
+        //}
     }
 }

@@ -6,6 +6,7 @@ using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Auth.Command.CreateUser;
+using QuizApp.Application.Features.User.Commands.UpdateProfile;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Application.Services;
@@ -37,7 +38,7 @@ namespace QuizApp.Persistence.Services
             var result = await _userManager.CreateAsync(user, request.Password);
             //if (result.Succeeded)
             //{
-             await SendConfirmationEmail(user);
+            //await SendConfirmationEmail(user);
             //}
 
         }
@@ -93,5 +94,15 @@ namespace QuizApp.Persistence.Services
             }
         }
 
+        public async Task UpdateProfile(UpdateProfileCommand request)
+        {
+            var result = await _userManager.FindByIdAsync(request.Id);
+            if(result == null)
+            {
+                throw new NotFoundException("User");
+            }
+            var mapped = _mapper.Map<AppUser>(request);
+            await _userManager.UpdateAsync(mapped);
+        }
     }
 }
