@@ -1,9 +1,25 @@
-﻿namespace QuizApp.Application.Common.Constants;
+﻿using System.Collections.ObjectModel;
+
+namespace QuizApp.Application.Common.Constants;
 
 public static class EmailTemplates
 {
-    public static string LinkBuilder(string mail, string token) => $"https://localhost:7250/api/Auth/ConfirmMail?mail={mail}&token={token}";
-    public const string ConfirmEmailMessage = @"
+    public static string LinkBuilder(string baseUrl,string email, string token) => $"{baseUrl}?email={email}&token={token}";
+    public static Dictionary<string, string> PasswordReset = new()
+    {
+        { "Title" , "Password Reset" },
+        { "Body" , "Hi. To reset your password please click to button below." },
+        { "Link", "https://localhost:7250/api/auth/ResetPassword" },
+        { "Button","Reset Password" }
+    };
+    public static Dictionary<string, string> AccountActivation = new()
+    {
+        { "Title" , "Account Activation" },
+        { "Body" , "Hi. Welcome to QuizApp, to activate your account, just click the button below." },
+        { "Link", "https://localhost:7250/api/auth/ConfirmMail" },
+        { "Button","Activate Account" }
+    };
+    public const string EmailMessage = @"
 <!DOCTYPE html>
 <html lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:v='urn:schemas-microsoft-com:vml' xmlns:o='urn:schemas-microsoft-com:office:office'>
 <head>
@@ -57,7 +73,6 @@ public static class EmailTemplates
       table.mj-full-width-mobile {
         width: 100% !important;
       }
-
       td.mj-full-width-mobile {
         width: auto !important;
       }
@@ -137,14 +152,14 @@ border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none
                             <tr>
                               <td align='center' style='font-size: 0px; word-break: break-word; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; padding: 10px 25px;'>
                                 <div style='font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 400; line-height: 30px; color: #ffffff;' align='center'>
-                                  <h1 style='font-size: 24px; line-height: normal; font-weight: 400; margin: 0;'>Account Activation</h1>
+                                  <h1 style='font-size: 24px; line-height: normal; font-weight: 400; margin: 0;'>|</h1>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align='left' style='font-size: 0px; word-break: break-word; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; padding: 10px 25px;'>
                                 <div style='font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; color: #ffffff;' align='center'>
-                                  <p style='display: block; margin: 0;'>Hi. Welcome to QuizApp, to activate your account, just click the button below. </p>
+                                  <p style='display: block; margin: 0;'>|</p>
                                 </div>
                               </td>
                             </tr>
@@ -154,7 +169,7 @@ border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none
                                   <tr>
                                     <td align='center' bgcolor='#2e58ff' role='presentation' style='border-radius: 3px; cursor: auto; mso-padding-alt: 10px 25px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; border-style: none;' valign='middle'>
                                       <a href='|' style='display: inline-block; background-color: #2e58ff; color: white; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; line-height: 32px; text-decoration: none; text-transform: none; mso-padding-alt: 0px; border-radius: 10px; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; margin: 0; padding: 10px 25px;' target='_blank'>
-                                        <strong>Activate Account</strong>
+                                        <strong>|</strong>
                                       </a>
                                     </td>
                                   </tr>

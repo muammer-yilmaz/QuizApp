@@ -3,6 +3,6 @@
 namespace QuizApp.Application.Features.Auth.Commands.ConfirmMail;
 
 public sealed record ConfirmMailCommand(
-    string Mail,
+    string Email,
     string Token
     ) : ICommand<ConfirmMailCommandResponse>;

@@ -45,7 +45,7 @@ namespace QuizApp.Persistence.Services
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                //await SendConfirmationEmail(user);
+                await SendConfirmationEmail(user);
             }
 
         }
@@ -79,7 +79,7 @@ namespace QuizApp.Persistence.Services
             {
                 To = user.Email,
                 Subject = "Confirm Email",
-                Body = EmailTemplates.ConfirmEmailMessage
+                Body = EmailTemplates.EmailMessage
             };
             await _mailService.SendEmailConfirmationMail(request, encoded);
         }

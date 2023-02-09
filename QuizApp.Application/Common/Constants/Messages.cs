@@ -14,8 +14,7 @@
         public const string NoAuth = "You are not authorized.";
         public const string EmailConfirmed = "Email successfully confirmed";
         public const string EmailNotConfirmed = "Email is not confirmed.";
-
-
-        
+        public const string PasswordResetMailSent = "Password reset link sent to your email address.";
+        public const string PasswordResetSuccessful = "Password reset is successful.";
     }
 }
