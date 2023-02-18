@@ -79,7 +79,6 @@ namespace QuizApp.Persistence.Services
             {
                 To = user.Email,
                 Subject = "Confirm Email",
-                Body = EmailTemplates.EmailMessage
             };
             await _mailService.SendEmailConfirmationMail(request, encoded);
         }

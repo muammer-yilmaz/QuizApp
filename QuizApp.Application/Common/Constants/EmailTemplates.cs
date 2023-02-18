@@ -4,22 +4,21 @@ namespace QuizApp.Application.Common.Constants;
 
 public static class EmailTemplates
 {
-    public static string LinkBuilder(string baseUrl,string email, string token) => $"{baseUrl}?email={email}&token={token}";
-    public static Dictionary<string, string> PasswordReset = new()
+    public static Dictionary<string, string> PasswordReset(string email, string token) => new()
     {
         { "Title" , "Password Reset" },
         { "Body" , "Hi. To reset your password please click to button below." },
-        { "Link", "https://localhost:7250/api/auth/ResetPassword" },
+        { "Link", $"https://localhost:7250/api/auth/ResetPassword?email={email}&token={token}" },
         { "Button","Reset Password" }
     };
-    public static Dictionary<string, string> AccountActivation = new()
+    public static Dictionary<string, string> AccountActivation(string email, string token) => new()
     {
         { "Title" , "Account Activation" },
         { "Body" , "Hi. Welcome to QuizApp, to activate your account, just click the button below." },
-        { "Link", "https://localhost:7250/api/auth/ConfirmMail" },
+        { "Link", $"https://localhost:7250/api/auth/ConfirmMail?email={email}&token={token}" },
         { "Button","Activate Account" }
     };
-    public const string EmailMessage = @"
+    public static string EmailMessage(Dictionary<string, string> values) => $@"
 <!DOCTYPE html>
 <html lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:v='urn:schemas-microsoft-com:vml' xmlns:o='urn:schemas-microsoft-com:office:office'>
 <head>
@@ -28,71 +27,71 @@ public static class EmailTemplates
   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <style type='text/css'>
-    #outlook a {
+    #outlook a {{
       padding: 0;
-    }
-    body {
+    }}
+    body {{
       margin: 0;
       padding: 0;
       -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
-    }
+    }}
     table,
-    td {
+    td {{
       border-collapse: collapse;
       mso-table-lspace: 0pt;
       mso-table-rspace: 0pt;
-    }
-    img {
+    }}
+    img {{
       border: 0;
       height: auto;
       line-height: 100%;
       outline: none;
       text-decoration: none;
       -ms-interpolation-mode: bicubic;
-    }
-    p {
+    }}
+    p {{
       display: block;
       margin: 13px 0;
-    }
+    }}
   </style>
   <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,700' rel='stylesheet' type='text/css'>
   <style type='text/css'>
     @import url(https://fonts.googleapis.com/css?family=Roboto:100,300,400,700);
   </style>
   <style type='text/css'>
-    @media only screen and (min-width:480px) {
-      .mj-column-per-100 {
+    @media only screen and (min-width:480px) {{
+      .mj-column-per- 100 {{
         width: 100% !important;
         max-width: 100%;
-      }
-    }
+      }}
+    }}
   </style>
   <style type='text/css'>
-    @media only screen and (max-width:480px) {
-      table.mj-full-width-mobile {
+    @media only screen and (max-width:480px) {{
+      table.mj-full-width- mobile {{
         width: 100% !important;
-      }
-      td.mj-full-width-mobile {
+      }}
+      td.mj-full-width-mobile {{
         width: auto !important;
-      }
-    }
+      }}
+    }}
   </style>
   <style type='text/css'>
     a,
     span,
     td,
-    th {
+    th {{
       -webkit-font-smoothing: antialiased !important;
       -moz-osx-font-smoothing: grayscale !important;
-    }
+    }}
   </style>
-<style>body {
+<style>body {{
 margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;
-}
-img {
+}}
+img {{
 border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;
-}
+}}
 </style>
 </head>
 <body style='-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0;' bgcolor='#f3f3f5'>
@@ -152,14 +151,14 @@ border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none
                             <tr>
                               <td align='center' style='font-size: 0px; word-break: break-word; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; padding: 10px 25px;'>
                                 <div style='font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 400; line-height: 30px; color: #ffffff;' align='center'>
-                                  <h1 style='font-size: 24px; line-height: normal; font-weight: 400; margin: 0;'>|</h1>
+                                  <h1 style='font-size: 24px; line-height: normal; font-weight: 400; margin: 0;'>{values.GetValueOrDefault("Title")}</h1>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align='left' style='font-size: 0px; word-break: break-word; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; padding: 10px 25px;'>
                                 <div style='font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; color: #ffffff;' align='center'>
-                                  <p style='display: block; margin: 0;'>|</p>
+                                  <p style='display: block; margin: 0;'>{values.GetValueOrDefault("Body")}</p>
                                 </div>
                               </td>
                             </tr>
@@ -168,8 +167,8 @@ border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none
                                 <table border='0' cellpadding='0' cellspacing='0' role='presentation' style='border-collapse: separate; line-height: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;'>
                                   <tr>
                                     <td align='center' bgcolor='#2e58ff' role='presentation' style='border-radius: 3px; cursor: auto; mso-padding-alt: 10px 25px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; border-style: none;' valign='middle'>
-                                      <a href='|' style='display: inline-block; background-color: #2e58ff; color: white; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; line-height: 32px; text-decoration: none; text-transform: none; mso-padding-alt: 0px; border-radius: 10px; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; margin: 0; padding: 10px 25px;' target='_blank'>
-                                        <strong>|</strong>
+                                      <a href='{values.GetValueOrDefault("Link")}' style='display: inline-block; background-color: #2e58ff; color: white; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; line-height: 32px; text-decoration: none; text-transform: none; mso-padding-alt: 0px; border-radius: 10px; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; margin: 0; padding: 10px 25px;' target='_blank'>
+                                        <strong>{values.GetValueOrDefault("Button")}</strong>
                                       </a>
                                     </td>
                                   </tr>
@@ -193,7 +192,7 @@ border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none
                             <tr>
                               <td align='left' style='font-size: 0px; word-break: break-word; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; padding: 10px 25px;'>
                                 <div style='font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 400; line-height: 20px; color: #ffffff;' align='left'>
-                                  <p style='display: block; margin: 0;'>If you didn't requested this mail, please ignore it</p>
+                                  <p style='display: block; margin: 0;'>If you didn't request this mail, please ignore it</p>
                                 </div>
                               </td>
                             </tr>

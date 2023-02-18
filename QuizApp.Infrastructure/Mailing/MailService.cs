@@ -3,7 +3,6 @@ using MimeKit;
 using QuizApp.Application.Abstraction.Email;
 using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.DTOs;
-using System.Text.RegularExpressions;
 
 namespace QuizApp.Infrastructure.Mailing
 {
@@ -31,11 +30,9 @@ namespace QuizApp.Infrastructure.Mailing
             mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));
             mail.To.Add(MailboxAddress.Parse(request.To));
             mail.Subject = request.Subject;
-            EmailTemplates.AccountActivation["Link"]
-                = EmailTemplates.LinkBuilder(EmailTemplates.AccountActivation["Link"], request.To, token);
             mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = ChangeMailBody(request.Body, EmailTemplates.AccountActivation)
+                Text = EmailTemplates.EmailMessage(EmailTemplates.AccountActivation(request.To,token))
             };
 
             //await SendEmailAsync(mail);
@@ -47,24 +44,12 @@ namespace QuizApp.Infrastructure.Mailing
             mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));
             mail.To.Add(MailboxAddress.Parse(request.To));
             mail.Subject = request.Subject;
-            EmailTemplates.PasswordReset["Link"]
-                = EmailTemplates.LinkBuilder(EmailTemplates.PasswordReset["Link"], request.To, token);
             mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = ChangeMailBody(request.Body, EmailTemplates.PasswordReset)
+                Text = EmailTemplates.EmailMessage(EmailTemplates.PasswordReset(request.To, token))
             };
 
-            //await SendEmailAsync(mail);
-        }
-
-        private string ChangeMailBody(string body, Dictionary<string, string> values)
-        {
-            var rgx = new Regex("\\|");
-            foreach (var key in values.Keys)
-            {
-                body = rgx.Replace(body, values[key], 1);
-            }
-            return body;
+            await SendEmailAsync(mail);
         }
     }
 }

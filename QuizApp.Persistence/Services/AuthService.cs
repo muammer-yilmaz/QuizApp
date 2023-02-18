@@ -40,7 +40,7 @@ namespace QuizApp.Persistence.Services
             {
                 throw new NotFoundException(Messages.NotFound("Email"));
             }
-            var charArray = new[] { '+', '#', '*', '<', '>', '|', '#','(',')',' ' };
+            var charArray = new[] { '+', '#', '*', '<', '>', '|', '#','(',')'};
             var token = request.Token.IndexOfAny(charArray) >= 0 ? request.Token : WebUtility.UrlDecode(request.Token);
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if(result.Succeeded)
@@ -56,7 +56,7 @@ namespace QuizApp.Persistence.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
             if(user == null)
             {
-                throw new NotFoundException("User");
+                throw new NotFoundException(Messages.NotFound("User"));
             }
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encoded = WebUtility.UrlEncode(token);
@@ -64,7 +64,6 @@ namespace QuizApp.Persistence.Services
             {
                 To = request.Email,
                 Subject = "Password Reset",
-                Body = EmailTemplates.EmailMessage
             };
             await _mailService.SendPasswordResetEmail(email, encoded);
         }
