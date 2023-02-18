@@ -1,5 +1,6 @@
 ﻿using QuizApp.Application.Features.Category.Commands.CreateCategory;
 using QuizApp.Application.Features.Category.Commands.DeleteCategory;
+using QuizApp.Application.Features.Category.Queries.GetAllCategories;
 
 namespace QuizApp.Application.Services
 {
@@ -7,5 +8,6 @@ namespace QuizApp.Application.Services
     {
         public Task CreateCategory(CreateCategoryCommand request);
         public Task DeleteCategory(DeleteCategoryCommand request);
+        public Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request);
     }
 }

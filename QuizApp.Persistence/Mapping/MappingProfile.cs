@@ -38,7 +38,8 @@ namespace QuizApp.Persistence.Mapping
             CreateMap<CreateQuestionCommand, Question>();
             CreateMap<UpdateQuestionCommand, Question>();
 
-            CreateMap<CreateOptionCommand, Option>();
+            CreateMap<CreateOptionDto, Option>();
+            CreateMap<CreateOptionCommand, List<Option>>();
             CreateMap<UpdateOptionCommand, Option>();
 
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Option.Commands.CreateOption;
 using QuizApp.Application.Features.Option.Commands.DeleteOption;
+using QuizApp.Application.Features.Option.Commands.UpdateAnswer;
 using QuizApp.Application.Features.Option.Commands.UpdateOption;
 
 namespace QuizApp.WebAPI.Controllers
@@ -29,6 +30,13 @@ namespace QuizApp.WebAPI.Controllers
 
         [HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody] UpdateOptionCommand request)
+        {
+            var response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateAnswer([FromBody] UpdateAnswerCommand request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);

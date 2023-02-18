@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Category.Commands.CreateCategory;
 using QuizApp.Application.Features.Category.Commands.DeleteCategory;
+using QuizApp.Application.Features.Category.Queries.GetAllCategories;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
@@ -33,6 +35,15 @@ namespace QuizApp.Persistence.Services
         {
             await _writeRepository.RemoveAsync(request.Id);
             await _writeRepository.SaveAsync();
+        }
+
+        public async Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request)
+        {
+            var result = await _readRepository.GetAll().ToListAsync();
+            return new GetAllCategoriesQueryResponse()
+            {
+                Categories = result
+            };
         }
 
         private async Task CheckIfCategoryNameExists(string categoryName)

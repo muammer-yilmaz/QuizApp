@@ -30,6 +30,7 @@ namespace QuizApp.Persistence.Repositories
         /// <returns></returns>
         public async Task<bool> AddRangeAsync(List<T> datas)
         {
+            datas.ForEach(x => x.Id = Guid.NewGuid().ToString());
             await Table.AddRangeAsync(datas);
             return true;
         }

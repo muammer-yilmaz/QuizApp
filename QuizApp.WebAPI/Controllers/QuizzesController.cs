@@ -1,18 +1,24 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
+using QuizApp.Application.Repositories;
+using QuizApp.Persistence.Repositories;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace QuizApp.WebAPI.Controllers
 {
     public class QuizzesController : ApiController
     {
-        public QuizzesController(IMediator mediator) : base(mediator)
+        private readonly IQuizReadRepository _quizReadRepository;
+        public QuizzesController(IMediator mediator, IQuizReadRepository quizReadRepository) : base(mediator)
         {
+            _quizReadRepository = quizReadRepository;
         }
 
         [HttpGet("[action]")]
@@ -48,6 +54,16 @@ namespace QuizApp.WebAPI.Controllers
         {
             var response = await _mediator.Send(request);
             return Ok(response);
+        }
+
+        [HttpGet("GetQuizValuesFromDb")]
+        [SwaggerOperation(Summary ="This method queries all fields of a single quiz from db")]
+        public async Task<IActionResult> GetValues(string id)
+        {
+            var query = _quizReadRepository.GetWhere(p => p.Id == id);
+            var result = await query.Include(p => p.Questions).ThenInclude(p => p.Options).FirstOrDefaultAsync();
+
+            return Ok(result);
         }
     }
 }

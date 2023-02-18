@@ -3,8 +3,11 @@
 namespace QuizApp.Application.Features.Option.Commands.CreateOption
 {
     public sealed record CreateOptionCommand(
-        string QuestionId,
-        string Description,
-        bool IsAnswer
+        List<CreateOptionDto> Options
         ) : ICommand<CreateOptionCommandResponse>;
+
+    public sealed record CreateOptionDto(
+       string QuestionId,
+       string Description,
+       bool IsAnswer);
 }

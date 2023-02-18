@@ -13,6 +13,10 @@ namespace QuizApp.Domain.Entities
         public string UserId { get; set; }
         [JsonIgnore]
         public AppUser User { get; set; }
+        public int Score { get; set; } = 0;
+        public string CategoryId { get; set; }
+        public Category Category { get; set; }
+        public bool IsVisible { get; set; }
         public ICollection<Question> Questions { get; set; }
 
     }

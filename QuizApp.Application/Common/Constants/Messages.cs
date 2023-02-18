@@ -16,5 +16,9 @@
         public const string EmailNotConfirmed = "Email is not confirmed.";
         public const string PasswordResetMailSent = "Password reset link sent to your email address.";
         public const string PasswordResetSuccessful = "Password reset is successful.";
+        public const string OptionsCanHaveOnlyOneTrueAnswer = "Options can only have one true answer.";
+        public const string OptionAlreadyFalse = "This option is already false.";
+        public const string OptionAlreadyTrue = "This option is already true.";
+
     }
 }

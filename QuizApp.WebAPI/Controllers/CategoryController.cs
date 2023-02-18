@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Category.Commands.CreateCategory;
 using QuizApp.Application.Features.Category.Commands.DeleteCategory;
+using QuizApp.Application.Features.Category.Queries.GetAllCategories;
 
 namespace QuizApp.WebAPI.Controllers
 {
@@ -9,6 +10,13 @@ namespace QuizApp.WebAPI.Controllers
     {
         public CategoryController(IMediator mediator) : base(mediator)
         {
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _mediator.Send(new GetAllCategoriesQuery());
+            return Ok(response);
         }
 
         [HttpPost("[action]")]
@@ -25,5 +33,6 @@ namespace QuizApp.WebAPI.Controllers
             await _mediator.Send(request);
             return NoContent();
         }
+
     }
 }

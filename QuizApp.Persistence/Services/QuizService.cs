@@ -31,9 +31,8 @@ namespace QuizApp.Persistence.Services
         public async Task CreateQuizAsync(CreateQuizCommand request)
         {
             var mappedQuiz = _mapper.Map<Quiz>(request);
-            mappedQuiz.Id = Guid.NewGuid().ToString();
             mappedQuiz.UserId = request.UserId;
-            var smth = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication);
+            //var smth = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication);
             var result = await _writeRepository.AddAsync(mappedQuiz);
             if (!result)
                 throw new Exception(Messages.AddFailure);

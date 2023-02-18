@@ -4,6 +4,7 @@ using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Option.Commands.CreateOption;
 using QuizApp.Application.Features.Option.Commands.DeleteOption;
+using QuizApp.Application.Features.Option.Commands.UpdateAnswer;
 using QuizApp.Application.Features.Option.Commands.UpdateOption;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
@@ -26,9 +27,12 @@ namespace QuizApp.Persistence.Services
 
         public async Task CreateOption(CreateOptionCommand request)
         {
-            await CheckIfOptionCountMax(request.QuestionId);
-            var mapped = _mapper.Map<Option>(request);
-            await _writeRepository.AddAsync(mapped);
+            if(request.Options.FindAll(x => x.IsAnswer == true).Count != 1)
+            {
+                throw new BusinessException(Messages.OptionsCanHaveOnlyOneTrueAnswer);
+            }
+            var mapped = _mapper.Map<List<Option>>(request.Options);
+            await _writeRepository.AddRangeAsync(mapped);
             await _writeRepository.SaveAsync();
         }
 
@@ -42,18 +46,28 @@ namespace QuizApp.Persistence.Services
         public async Task UpdateOption(UpdateOptionCommand request)
         {
             var option = await CheckIfOptionExists(request.Id);
-            //await CheckIfAllOptionsFalse(request.Id);
             var mapped = _mapper.Map(request,option);
             _writeRepository.Update(mapped);
             await _writeRepository.SaveAsync();
         }
-
-
-        private async Task CheckIfOptionCountMax(string questionId)
+        public async Task UpdateAnswer(UpdateAnswerCommand request)
         {
-            var result = await _readRepository.GetWhere(x => x.QuestionId == questionId,false).ToListAsync();
-            if (result.Count() == 4)
-                throw new BusinessException(Messages.QuestionOptionMaxed);
+            var options = await _readRepository
+                .GetAll()
+                .Where(x => x.Id == request.OldAnswerId || x.Id == request.NewAnswerId)
+                .ToListAsync();
+            if(options.Count != 2)
+            {
+                throw new NotFoundException(Messages.NotFound("Option"));
+            }
+
+            var oldOption = options.FirstOrDefault(x => x.Id == request.OldAnswerId)!;
+            var newOption = options.FirstOrDefault(x => x.Id == request.NewAnswerId)!;
+            
+            oldOption.IsAnswer = oldOption.IsAnswer == true ? false : throw new BusinessException(Messages.OptionAlreadyFalse);
+            newOption.IsAnswer = newOption.IsAnswer == false ? true : throw new BusinessException(Messages.OptionAlreadyTrue);
+            
+            await _writeRepository.SaveAsync();
         }
 
         private async Task<Option> CheckIfOptionExists(string id)
@@ -63,13 +77,6 @@ namespace QuizApp.Persistence.Services
                 throw new NotFoundException(Messages.NotFound("Option"));
             return result;
         }
-
-        private async Task CheckIfAllOptionsFalse(string id)
-        {
-            var option = await _readRepository.GetWhere(x => x.Id == id,false).SingleOrDefaultAsync();
-            var list = await _readRepository.GetWhere(x => x.QuestionId == option.QuestionId,false).ToListAsync();
-            if (!list.Any(x => x.IsAnswer == true))
-                throw new BusinessException(Messages.QuestionOptionAllFalse);
-        }
+    
     }
 }

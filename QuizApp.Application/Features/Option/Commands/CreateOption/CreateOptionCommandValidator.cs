@@ -6,7 +6,12 @@ public class CreateOptionCommandValidator : AbstractValidator<CreateOptionComman
 {
 	public CreateOptionCommandValidator()
 	{
-		RuleFor(p => p.Description).NotEmpty();
-		RuleFor(p => p.QuestionId).NotEmpty();
+		RuleFor(p => p.Options).NotEmpty();
+		RuleFor(p => p.Options.Count).InclusiveBetween(2, 4);
+		RuleForEach(p => p.Options).ChildRules(child =>
+		{
+			child.RuleFor(p => p.Description).NotEmpty();
+			child.RuleFor(p => p.QuestionId).NotEmpty();
+		});
 	}
 }
