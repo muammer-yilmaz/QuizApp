@@ -33,6 +33,29 @@ namespace QuizApp.Persistence.Services
             _mailService = mailService;
         }
 
+        public async Task<Token> LoginAsync(LoginCommand request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                throw new NotFoundException(Messages.NotFound("User"));
+            }
+
+            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+
+            if (result.Succeeded)
+            {
+                Token token = _tokenHandler.CreateToken(user);
+                return token;
+            }
+            //else if(result.IsNotAllowed && !user.EmailConfirmed)
+            //{
+            //    throw new AuthorizationException(Messages.EmailNotConfirmed);
+            //}
+
+            throw new AuthorizationException(Messages.PasswordMismatch);
+        }
+
         public async Task ConfirmMail(ConfirmMailCommand request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -68,30 +91,6 @@ namespace QuizApp.Persistence.Services
             await _mailService.SendPasswordResetEmail(email, encoded);
         }
 
-        public async Task<Token> LoginAsync(LoginCommand request)
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if(user == null)
-            {
-                throw new NotFoundException(Messages.NotFound("User"));
-            }
-
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password,false);
-
-            if (result.Succeeded)
-            {
-                Token token = _tokenHandler.CreateToken(user);
-                return token;
-            }
-            //else if(result.IsNotAllowed && !user.EmailConfirmed)
-            //{
-            //    throw new AuthorizationException(Messages.EmailNotConfirmed);
-            //}
-
-            throw new AuthorizationException(Messages.PasswordMismatch);
-
-        }
-
         public async Task PasswordResetConfirm(ResetPasswordCommand request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -99,7 +98,9 @@ namespace QuizApp.Persistence.Services
             {
                 throw new NotFoundException(Messages.NotFound("User"));
             }
-            var identityResult = await _userManager.ResetPasswordAsync(user, WebUtility.UrlDecode(request.Token), request.NewPassword);
+            var charArray = new[] { '+', '#', '*', '<', '>', '|', '#', '(', ')' };
+            var token = request.Token.IndexOfAny(charArray) >= 0 ? request.Token : WebUtility.UrlDecode(request.Token);
+            var identityResult = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
             if(identityResult.Succeeded)
             {
                 return;

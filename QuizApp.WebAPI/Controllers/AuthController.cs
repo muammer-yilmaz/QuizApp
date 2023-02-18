@@ -21,7 +21,7 @@ namespace QuizApp.WebAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> ConfirmMail([FromQuery]string email,[FromQuery]string token)
+        public async Task<IActionResult> ConfirmMail([FromQuery] string email, [FromQuery] string token)
         {
             ConfirmMailCommand request = new(email, token);
             var response = await _mediator.Send(request);
@@ -37,11 +37,14 @@ namespace QuizApp.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] string newPassword)
+        public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] NewPasswordDto newPassword)
         {
-            ResetPasswordCommand request = new(email, token, newPassword);
+            ResetPasswordCommand request = new(email, token, newPassword.NewPassword);
             var response = await _mediator.Send(request);
             return Ok(response);
         }
     }
+    public sealed record NewPasswordDto(
+        string NewPassword
+    );
 }
