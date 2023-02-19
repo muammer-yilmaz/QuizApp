@@ -22,11 +22,12 @@ namespace QuizApp.WebAPI.Controllers
             var response = await _mediator.Send(request);
             return Ok(response);
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+        [SwaggerOperation(Summary = "**This action requires authentication**")]
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetUserProfile()
         {
-            GetUserQuery query = new(id);
+            GetUserQuery query = new();
             var response = await _mediator.Send(query);
             return Ok(response);
         }

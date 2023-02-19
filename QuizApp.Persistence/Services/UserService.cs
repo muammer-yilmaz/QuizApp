@@ -52,7 +52,9 @@ namespace QuizApp.Persistence.Services
 
         public async Task<GetUserQueryResponse> GetUserById(GetUserQuery request)
         {
-            var result = await _userManager.FindByIdAsync(request.Id);
+            string userId = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication).Value;
+
+            var result = await _userManager.FindByIdAsync(userId);
             if (result == null)
             {
                 throw new NotFoundException(Messages.NotFound("User"));

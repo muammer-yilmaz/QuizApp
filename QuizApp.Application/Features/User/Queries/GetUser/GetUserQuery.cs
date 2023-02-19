@@ -2,7 +2,5 @@
 
 namespace QuizApp.Application.Features.User.Queries.GetUser
 {
-    public sealed record GetUserQuery(
-        string Id
-        ) : IQuery<GetUserQueryResponse>;
+    public sealed record GetUserQuery() : IQuery<GetUserQueryResponse>;
 }
