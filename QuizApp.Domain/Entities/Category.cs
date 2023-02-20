@@ -1,9 +1,8 @@
 ﻿using QuizApp.Domain.Common;
 
-namespace QuizApp.Domain.Entities
+namespace QuizApp.Domain.Entities;
+
+public class Category : BaseEntity
 {
-    public class Category : BaseEntity
-    {
-        public string CategoryName { get; set; }
-    }
+    public string CategoryName { get; set; }
 }

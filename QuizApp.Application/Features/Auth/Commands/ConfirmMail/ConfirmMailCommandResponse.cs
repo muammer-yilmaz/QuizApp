@@ -1,4 +1,4 @@
-﻿using QuizApp.Application.Common.Consts;
+﻿using QuizApp.Application.Common.Constants;
 
 namespace QuizApp.Application.Features.Auth.Commands.ConfirmMail;
 

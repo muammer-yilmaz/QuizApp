@@ -4,42 +4,41 @@ using QuizApp.Domain.Common;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Entities.Identity;
 
-namespace QuizApp.Persistence
+namespace QuizApp.Persistence;
+
+public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
 {
-    public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public AppDbContext(DbContextOptions options) : base(options)
     {
-        public AppDbContext(DbContextOptions options) : base(options)
+
+    }
+
+    public DbSet<Quiz> Quizzes { get; set; }
+    public DbSet<Question> Questions { get; set; }
+    public DbSet<Option> Options { get; set; }
+    public DbSet<Category> Categories { get; set; }
+
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries<BaseEntity>();
+
+        foreach (var entry in entries)
         {
-
-        }
-
-        public DbSet<Quiz> Quizzes { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<Option> Options { get; set; }
-        public DbSet<Category> Categories { get; set; }
-
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var entries = ChangeTracker.Entries<BaseEntity>();
-
-            foreach (var entry in entries)
+            switch(entry.State)
             {
-                switch(entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.CreatedDate = DateTime.UtcNow;
-                        //entry.Entity.Id = Guid.NewGuid().ToString();
-                        break;
-                    case EntityState.Modified:
-                        entry.Entity.UpdatedDate = DateTime.UtcNow;
-                        break;
-                    default:
-                        break;
-                }
+                case EntityState.Added:
+                    entry.Entity.CreatedDate = DateTime.UtcNow;
+                    //entry.Entity.Id = Guid.NewGuid().ToString();
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedDate = DateTime.UtcNow;
+                    break;
+                default:
+                    break;
             }
-
-            return base.SaveChangesAsync(cancellationToken);
         }
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

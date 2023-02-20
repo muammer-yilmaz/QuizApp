@@ -1,8 +1,7 @@
 ﻿using QuizApp.Domain.Entities;
 
-namespace QuizApp.Application.Repositories
+namespace QuizApp.Application.Repositories;
+
+public interface IQuestionReadRepository : IReadRepository<Question>
 {
-    public interface IQuestionReadRepository : IReadRepository<Question>
-    {
-    }
 }

@@ -1,10 +1,9 @@
-﻿using QuizApp.Application.Common.Consts;
+﻿using QuizApp.Application.Common.Constants;
 
-namespace QuizApp.Application.Features.Auth.Command.CreateUser
+namespace QuizApp.Application.Features.User.Commands.CreateUser;
+
+public sealed record CreateUserCommandResponse
 {
-    public sealed record CreateUserCommandResponse
-    {
-        public string Message { get; } = Messages.CreateSuccessful("User"); 
-    }
-
+    public string Message { get; } = Messages.CreateSuccessful("User");
 }
+

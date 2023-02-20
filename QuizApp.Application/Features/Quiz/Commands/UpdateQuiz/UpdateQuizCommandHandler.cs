@@ -1,21 +1,20 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
 using QuizApp.Application.Services;
 
-namespace QuizApp.Application.Features.Quiz.Commands.UpdateQuiz
+namespace QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
+
+public class UpdateQuizCommandHandler : ICommandHandler<UpdateQuizCommand, UpdateQuizCommandResponse>
 {
-    public class UpdateQuizCommandHandler : ICommandHandler<UpdateQuizCommand, UpdateQuizCommandResponse>
+    private readonly IQuizService _quizService;
+
+    public UpdateQuizCommandHandler(IQuizService quizService)
     {
-        private readonly IQuizService _quizService;
+        _quizService = quizService;
+    }
 
-        public UpdateQuizCommandHandler(IQuizService quizService)
-        {
-            _quizService = quizService;
-        }
-
-        public async Task<UpdateQuizCommandResponse> Handle(UpdateQuizCommand request, CancellationToken cancellationToken)
-        {
-            await _quizService.UpdateQuizAsync(request);
-            return new();
-        }
+    public async Task<UpdateQuizCommandResponse> Handle(UpdateQuizCommand request, CancellationToken cancellationToken)
+    {
+        await _quizService.UpdateQuizAsync(request);
+        return new();
     }
 }

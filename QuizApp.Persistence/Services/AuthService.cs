@@ -2,7 +2,6 @@
 using QuizApp.Application.Abstraction.Email;
 using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Common.Constants;
-using QuizApp.Application.Common.Consts;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Auth.Commands.ConfirmMail;

@@ -1,10 +1,9 @@
-﻿using QuizApp.Application.Common.Consts;
+﻿using QuizApp.Application.Common.Constants;
 
-namespace QuizApp.Application.Features.Category.Commands.CreateCategory
+namespace QuizApp.Application.Features.Category.Commands.CreateCategory;
+
+public sealed record CreateCategoryCommandResponse
 {
-    public sealed record CreateCategoryCommandResponse
-    {
-        public string Message {get;} = Messages.CreateSuccessful("Category"); 
-    }
-    
+    public string Message {get;} = Messages.CreateSuccessful("Category"); 
 }
+

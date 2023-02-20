@@ -1,10 +1,9 @@
-﻿namespace QuizApp.Application.Common.Exceptions
-{
-    public class BusinessException : Exception
-    {
-        public BusinessException(string message) : base(message)
-        {
+﻿namespace QuizApp.Application.Common.Exceptions;
 
-        }
+public class BusinessException : Exception
+{
+    public BusinessException(string message) : base(message)
+    {
+
     }
 }

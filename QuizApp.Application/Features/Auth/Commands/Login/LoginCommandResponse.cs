@@ -1,9 +1,8 @@
 ﻿using QuizApp.Application.Common.DTOs;
 
-namespace QuizApp.Application.Features.Auth.Commands.Login
+namespace QuizApp.Application.Features.Auth.Commands.Login;
+
+public sealed class LoginCommandResponse
 {
-    public sealed class LoginCommandResponse
-    {
-        public TokenDto Token { get; set; }
-    }
+    public TokenDto Token { get; set; }
 }

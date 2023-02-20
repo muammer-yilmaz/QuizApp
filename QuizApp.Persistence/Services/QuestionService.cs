@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using QuizApp.Application.Common.Consts;
+using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Question.Commands.CreateQuestion;
 using QuizApp.Application.Features.Question.Commands.DeleteQuestion;

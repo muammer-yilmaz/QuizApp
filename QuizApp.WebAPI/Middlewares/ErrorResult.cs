@@ -1,24 +1,23 @@
 ﻿using Newtonsoft.Json;
 
-namespace QuizApp.WebAPI.Middlewares
+namespace QuizApp.WebAPI.Middlewares;
+
+public class ErrorResult : ErrorStatusCode
 {
-    public class ErrorResult : ErrorStatusCode
-    {
-        public string Message { get; set; }
-    }
+    public string Message { get; set; }
+}
 
-    public class ErrorStatusCode
-    {
-        public int StatusCode { get; set; }
+public class ErrorStatusCode
+{
+    public int StatusCode { get; set; }
 
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
-    }
-
-    public class ValidationErrorDetails : ErrorStatusCode
+    public override string ToString()
     {
-        public IEnumerable<string> Errors { get; set; }
+        return JsonConvert.SerializeObject(this);
     }
+}
+
+public class ValidationErrorDetails : ErrorStatusCode
+{
+    public IEnumerable<string> Errors { get; set; }
 }

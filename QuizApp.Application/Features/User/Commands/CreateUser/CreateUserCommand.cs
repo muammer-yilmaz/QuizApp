@@ -1,6 +1,6 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
 
-namespace QuizApp.Application.Features.Auth.Command.CreateUser
+namespace QuizApp.Application.Features.User.Commands.CreateUser
 {
     public sealed record CreateUserCommand(
         string UserName,

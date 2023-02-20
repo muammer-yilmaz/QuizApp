@@ -1,30 +1,29 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
 using QuizApp.Application.Services;
 
-namespace QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes
+namespace QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
+
+public class GetAllQuizzesQueryHandler : IQueryHandler<GetAllQuizzesQuery, GetAllQuizzesQueryResponse>
 {
-    public class GetAllQuizzesQueryHandler : IQueryHandler<GetAllQuizzesQuery, GetAllQuizzesQueryResponse>
+    private readonly IQuizService _quizService;
+
+    public GetAllQuizzesQueryHandler(IQuizService quizService)
     {
-        private readonly IQuizService _quizService;
+        _quizService = quizService;
+    }
 
-        public GetAllQuizzesQueryHandler(IQuizService quizService)
+    public async Task<GetAllQuizzesQueryResponse> Handle(GetAllQuizzesQuery request, CancellationToken cancellationToken)
+    {
+        GetAllQuizzesQueryResponse response;
+        if (request.SearchText == String.Empty)
         {
-            _quizService = quizService;
+            response = await _quizService.GetAllQuizzesAsync(request.Pagination);
         }
-
-        public async Task<GetAllQuizzesQueryResponse> Handle(GetAllQuizzesQuery request, CancellationToken cancellationToken)
+        else
         {
-            GetAllQuizzesQueryResponse response;
-            if (request.SearchText == String.Empty)
-            {
-                response = await _quizService.GetAllQuizzesAsync(request.Pagination);
-            }
-            else
-            {
 
-                response = await _quizService.SearchQuizzes(request.SearchText, request.Pagination);
-            }
-            return response;
+            response = await _quizService.SearchQuizzes(request.SearchText, request.Pagination);
         }
+        return response;
     }
 }

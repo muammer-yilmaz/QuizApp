@@ -7,7 +7,7 @@ public sealed class ValidationException : Exception
         => ErrorsDictionary = errorsDictionary;
 
     public IReadOnlyDictionary<string, string[]> ErrorsDictionary { get; }
-   
+
 }
 
 public sealed class IdentityException : Exception

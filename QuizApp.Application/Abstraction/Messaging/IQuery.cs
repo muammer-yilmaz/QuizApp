@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace QuizApp.Application.Abstraction.Messaging
+namespace QuizApp.Application.Abstraction.Messaging;
+
+public interface IQuery<out TResponse> : IRequest<TResponse>
 {
-    public interface IQuery<out TResponse> : IRequest<TResponse>
-    {
-    }
 }

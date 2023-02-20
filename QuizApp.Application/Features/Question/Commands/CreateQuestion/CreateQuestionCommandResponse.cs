@@ -1,9 +1,8 @@
-﻿using QuizApp.Application.Common.Consts;
+﻿using QuizApp.Application.Common.Constants;
 
-namespace QuizApp.Application.Features.Question.Commands.CreateQuestion
+namespace QuizApp.Application.Features.Question.Commands.CreateQuestion;
+
+public sealed record CreateQuestionCommandResponse()
 {
-    public sealed record CreateQuestionCommandResponse()
-    {
-       public string Message { get; } = Messages.CreateSuccessful("Question");
-    }
+   public string Message { get; } = Messages.CreateSuccessful("Question");
 }

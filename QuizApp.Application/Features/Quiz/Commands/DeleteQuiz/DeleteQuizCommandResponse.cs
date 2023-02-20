@@ -1,6 +1,5 @@
-﻿namespace QuizApp.Application.Features.Quiz.Commands.DeleteQuiz
+﻿namespace QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
+
+public sealed record DeleteQuizCommandResponse()
 {
-    public sealed record DeleteQuizCommandResponse()
-    {
-    }
 }

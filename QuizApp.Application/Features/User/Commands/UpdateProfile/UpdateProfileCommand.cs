@@ -6,4 +6,6 @@ public sealed record UpdateProfileCommand : ICommand<UpdateProfileCommandRespons
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string? Biography { get; set; }
+
 }

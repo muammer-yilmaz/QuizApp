@@ -1,9 +1,8 @@
-﻿using QuizApp.Application.Common.Consts;
+﻿using QuizApp.Application.Common.Constants;
 
-namespace QuizApp.Application.Features.Question.Commands.UpdateQuestion
+namespace QuizApp.Application.Features.Question.Commands.UpdateQuestion;
+
+public sealed record UpdateQuestionCommandResponse()
 {
-    public sealed record UpdateQuestionCommandResponse()
-    {
-        public string Message { get; } = Messages.UpdateSuccessful("Question");
-    }
+    public string Message { get; } = Messages.UpdateSuccessful("Question");
 }

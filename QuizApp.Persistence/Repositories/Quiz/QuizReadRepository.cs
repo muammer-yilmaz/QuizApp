@@ -1,16 +1,10 @@
 ﻿using QuizApp.Application.Repositories;
 
-namespace QuizApp.Persistence.Repositories
+namespace QuizApp.Persistence.Repositories;
+
+public class QuizReadRepository : ReadRepository<Domain.Entities.Quiz>, IQuizReadRepository
 {
-    public class QuizReadRepository : ReadRepository<Domain.Entities.Quiz>, IQuizReadRepository
+    public QuizReadRepository(AppDbContext context) : base(context)
     {
-        private readonly AppDbContext _context;
-        public QuizReadRepository(AppDbContext context) : base(context)
-        {
-            _context = context;
-        }
-        public void GetQuiz()
-        {
-        }
     }
 }

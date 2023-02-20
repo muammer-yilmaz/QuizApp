@@ -1,25 +1,24 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
 using QuizApp.Application.Services;
 
-namespace QuizApp.Application.Features.Auth.Commands.Login
+namespace QuizApp.Application.Features.Auth.Commands.Login;
+
+public class LoginCommandHandler : ICommandHandler<LoginCommand, LoginCommandResponse>
 {
-    public class LoginCommandHandler : ICommandHandler<LoginCommand, LoginCommandResponse>
+    private readonly IAuthService _authService;
+
+    public LoginCommandHandler(IAuthService authService)
     {
-        private readonly IAuthService _authService;
+        _authService = authService;    
+    }
 
-        public LoginCommandHandler(IAuthService authService)
+    public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _authService.LoginAsync(request);
+
+        return new LoginCommandResponse()
         {
-            _authService = authService;    
-        }
-
-        public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
-        {
-            var result = await _authService.LoginAsync(request);
-
-            return new LoginCommandResponse()
-            {
-                Token = result,
-            };
-        }
+            Token = result,
+        };
     }
 }
