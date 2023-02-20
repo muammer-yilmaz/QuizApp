@@ -9,48 +9,47 @@ using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
 
-namespace QuizApp.Persistence.Services
+namespace QuizApp.Persistence.Services;
+
+public class CategoryService : ICategoryService
 {
-    public class CategoryService : ICategoryService
+    private readonly ICategoryWriteRepository _writeRepository;
+    private readonly ICategoryReadRepository _readRepository;
+    private readonly IMapper _mapper;
+    public CategoryService(ICategoryWriteRepository writeRepository, IMapper mapper, ICategoryReadRepository readRepository)
     {
-        private readonly ICategoryWriteRepository _writeRepository;
-        private readonly ICategoryReadRepository _readRepository;
-        private readonly IMapper _mapper;
-        public CategoryService(ICategoryWriteRepository writeRepository, IMapper mapper, ICategoryReadRepository readRepository)
-        {
-            _writeRepository = writeRepository;
-            _mapper = mapper;
-            _readRepository = readRepository;
-        }
+        _writeRepository = writeRepository;
+        _mapper = mapper;
+        _readRepository = readRepository;
+    }
 
-        public async Task CreateCategory(CreateCategoryCommand request)
-        {
-            await CheckIfCategoryNameExists(request.CategoryName);
-            var mapped = _mapper.Map<Category>(request);
-            await _writeRepository.AddAsync(mapped);
-            await _writeRepository.SaveAsync();
-        }
+    public async Task CreateCategory(CreateCategoryCommand request)
+    {
+        await CheckIfCategoryNameExists(request.CategoryName);
+        var mapped = _mapper.Map<Category>(request);
+        await _writeRepository.AddAsync(mapped);
+        await _writeRepository.SaveAsync();
+    }
 
-        public async Task DeleteCategory(DeleteCategoryCommand request)
-        {
-            await _writeRepository.RemoveAsync(request.Id);
-            await _writeRepository.SaveAsync();
-        }
+    public async Task DeleteCategory(DeleteCategoryCommand request)
+    {
+        await _writeRepository.RemoveAsync(request.Id);
+        await _writeRepository.SaveAsync();
+    }
 
-        public async Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request)
+    public async Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request)
+    {
+        var result = await _readRepository.GetAll().ToListAsync();
+        return new GetAllCategoriesQueryResponse()
         {
-            var result = await _readRepository.GetAll().ToListAsync();
-            return new GetAllCategoriesQueryResponse()
-            {
-                Categories = result
-            };
-        }
+            Categories = result
+        };
+    }
 
-        private async Task CheckIfCategoryNameExists(string categoryName)
-        {
-            var result = await _readRepository.GetSingleAsync(x => x.CategoryName == categoryName,false);
-            if (result != null)
-                throw new BusinessException(Messages.DuplicateObject(nameof(Category)));
-        }
+    private async Task CheckIfCategoryNameExists(string categoryName)
+    {
+        var result = await _readRepository.GetSingleAsync(x => x.CategoryName == categoryName,false);
+        if (result != null)
+            throw new BusinessException(Messages.DuplicateObject(nameof(Category)));
     }
 }

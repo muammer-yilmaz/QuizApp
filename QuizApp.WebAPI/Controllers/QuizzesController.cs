@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
@@ -22,12 +23,23 @@ namespace QuizApp.WebAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll()
+        [SwaggerOperation(Summary = "** Pagination **" )]
+        public async Task<IActionResult> GetQuizList([FromQuery] PaginationRequestDto pagination)
         {
-            GetAllQuizzesQuery query = new();
+            GetAllQuizzesQuery query = new(String.Empty,pagination);
             var response = await _mediator.Send(query);
             return Ok(response);
         }
+
+        [HttpGet("[action]")]
+        [SwaggerOperation(Summary = "** Pagination **")]
+        public async Task<IActionResult> SearchQuiz([FromQuery] string search, [FromQuery] PaginationRequestDto pagination)
+        {
+            GetAllQuizzesQuery query = new(search, pagination);
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetQuizDetails([FromQuery] GetQuizDetailsQuery request)
         {

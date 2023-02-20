@@ -4,6 +4,6 @@ namespace QuizApp.Application.Features.Auth.Commands.Login
 {
     public sealed class LoginCommandResponse
     {
-        public Token Token { get; set; }
+        public TokenDto Token { get; set; }
     }
 }

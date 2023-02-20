@@ -19,9 +19,9 @@ namespace QuizApp.Infrastructure.Authentication
         }
 
 
-        public Token CreateToken(AppUser appUser)
+        public TokenDto CreateToken(AppUser appUser)
         {
-            Token token = new();
+            TokenDto token = new();
 
             //Security Key'in simetriğini alıyoruz.
             SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));

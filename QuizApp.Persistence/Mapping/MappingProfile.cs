@@ -24,9 +24,11 @@ namespace QuizApp.Persistence.Mapping
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             
 
-            CreateMap<QuizDetails, Quiz>().ReverseMap();
+            CreateMap<QuizDetailsDto, Quiz>().ReverseMap();
             CreateMap<QuestionsDto, Question>().ReverseMap();
             CreateMap<OptionsDto, Option>().ReverseMap();
+
+            CreateMap<Quiz, QuizInfoDto>().ForMember(x => x.QuizId , opt => opt.MapFrom(x => x.Id));
 
             CreateMap<AppUser, GetUserQueryResponse>();
 

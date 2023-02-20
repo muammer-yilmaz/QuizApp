@@ -14,8 +14,17 @@ namespace QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes
 
         public async Task<GetAllQuizzesQueryResponse> Handle(GetAllQuizzesQuery request, CancellationToken cancellationToken)
         {
-            var result = await _quizService.GetAllQuizzesAsync();
-            return new(result);
+            GetAllQuizzesQueryResponse response;
+            if (request.SearchText == String.Empty)
+            {
+                response = await _quizService.GetAllQuizzesAsync(request.Pagination);
+            }
+            else
+            {
+
+                response = await _quizService.SearchQuizzes(request.SearchText, request.Pagination);
+            }
+            return response;
         }
     }
 }

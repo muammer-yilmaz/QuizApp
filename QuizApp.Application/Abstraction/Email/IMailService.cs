@@ -4,7 +4,7 @@ namespace QuizApp.Application.Abstraction.Email
 {
     public interface IMailService
     {
-        Task SendEmailConfirmationMail(EmailRequest request, string token);
-        Task SendPasswordResetEmail(EmailRequest request, string token);
+        Task SendEmailConfirmationMail(EmailRequestDto request, string token);
+        Task SendPasswordResetEmail(EmailRequestDto request, string token);
     }
 }

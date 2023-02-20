@@ -1,5 +1,4 @@
 ﻿using QuizApp.Application.Abstraction.Messaging;
-using System.Text.Json.Serialization;
 
 namespace QuizApp.Application.Features.User.Commands.UpdateProfile;
 

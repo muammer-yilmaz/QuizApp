@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Application.Common.DTOs
 {
-    public class EmailConfiguration
+    public class EmailConfigurationDto
     {
         public string Host { get; set; }
         public int Port { get; set; }

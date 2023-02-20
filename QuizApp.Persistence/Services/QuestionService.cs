@@ -8,49 +8,48 @@ using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
 
-namespace QuizApp.Persistence.Services
+namespace QuizApp.Persistence.Services;
+
+public class QuestionService : IQuestionService
 {
-    public class QuestionService : IQuestionService
+    private readonly IQuestionWriteRepository _writeRepository;
+    private readonly IQuestionReadRepository _readRepository;
+    private readonly IMapper _mapper;
+
+    public QuestionService(IQuestionWriteRepository writeRepository, IMapper mapper, IQuestionReadRepository readRepository)
     {
-        private readonly IQuestionWriteRepository _writeRepository;
-        private readonly IQuestionReadRepository _readRepository;
-        private readonly IMapper _mapper;
+        _writeRepository = writeRepository;
+        _mapper = mapper;
+        _readRepository = readRepository;
+    }
 
-        public QuestionService(IQuestionWriteRepository writeRepository, IMapper mapper, IQuestionReadRepository readRepository)
-        {
-            _writeRepository = writeRepository;
-            _mapper = mapper;
-            _readRepository = readRepository;
-        }
+    public async Task CreateQuestion(CreateQuestionCommand request)
+    {
+        var mapped = _mapper.Map<Question>(request);
+        await _writeRepository.AddAsync(mapped);
+        await _writeRepository.SaveAsync();
+    }
 
-        public async Task CreateQuestion(CreateQuestionCommand request)
-        {
-            var mapped = _mapper.Map<Question>(request);
-            await _writeRepository.AddAsync(mapped);
-            await _writeRepository.SaveAsync();
-        }
+    public async Task DeleteQuestion(DeleteQuestionCommand request)
+    {
+        await CheckIfQuestionExists(request.Id);
+        await _writeRepository.RemoveAsync(request.Id);
+        await _writeRepository.SaveAsync();
+    }
 
-        public async Task DeleteQuestion(DeleteQuestionCommand request)
-        {
-            await CheckIfQuestionExists(request.Id);
-            await _writeRepository.RemoveAsync(request.Id);
-            await _writeRepository.SaveAsync();
-        }
+    public async Task UpdateQuestion(UpdateQuestionCommand request)
+    {
+        var question = await CheckIfQuestionExists(request.Id);
+        var mapped = _mapper.Map(request,question);
+        _writeRepository.Update(mapped);
+        await _writeRepository.SaveAsync();
+    }
 
-        public async Task UpdateQuestion(UpdateQuestionCommand request)
-        {
-            var question = await CheckIfQuestionExists(request.Id);
-            var mapped = _mapper.Map(request,question);
-            _writeRepository.Update(mapped);
-            await _writeRepository.SaveAsync();
-        }
-
-        private async Task<Question> CheckIfQuestionExists(string id)
-        {
-            var result = await _readRepository.GetByIdAsync(id);
-            if (result == null)
-                throw new NotFoundException(Messages.NotFound("Question"));
-            return result;
-        }
+    private async Task<Question> CheckIfQuestionExists(string id)
+    {
+        var result = await _readRepository.GetByIdAsync(id);
+        if (result == null)
+            throw new NotFoundException(Messages.NotFound("Question"));
+        return result;
     }
 }

@@ -8,9 +8,9 @@ namespace QuizApp.Infrastructure.Mailing
 {
     public class MailService : IMailService
     {
-        private readonly EmailConfiguration _emailConfiguration;
+        private readonly EmailConfigurationDto _emailConfiguration;
 
-        public MailService(EmailConfiguration emailConfiguration)
+        public MailService(EmailConfigurationDto emailConfiguration)
         {
             _emailConfiguration = emailConfiguration;
         }
@@ -24,7 +24,7 @@ namespace QuizApp.Infrastructure.Mailing
             await smtp.DisconnectAsync(true);
         }
 
-        public async Task SendEmailConfirmationMail(EmailRequest request, string token)
+        public async Task SendEmailConfirmationMail(EmailRequestDto request, string token)
         {
             var mail = new MimeMessage();
             mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));
@@ -38,7 +38,7 @@ namespace QuizApp.Infrastructure.Mailing
             //await SendEmailAsync(mail);
         }
 
-        public async Task SendPasswordResetEmail(EmailRequest request, string token)
+        public async Task SendPasswordResetEmail(EmailRequestDto request, string token)
         {
             var mail = new MimeMessage();
             mail.From.Add(new MailboxAddress("QuizApp", _emailConfiguration.Username + "@yandex.com"));

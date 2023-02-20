@@ -13,7 +13,7 @@ namespace QuizApp.WebAPI.Configurations
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IMailService, MailService>();
 
-            var emailConfig = configuration.GetSection("Email").Get<EmailConfiguration>();
+            var emailConfig = configuration.GetSection("Email").Get<EmailConfigurationDto>();
             services.AddSingleton(emailConfig);
         }
     }

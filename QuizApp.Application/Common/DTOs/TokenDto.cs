@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Application.Common.DTOs
 {
-    public class Token
+    public class TokenDto
     {
         public string AccessToken { get; set; }
         public DateTime Expiration { get; set; }

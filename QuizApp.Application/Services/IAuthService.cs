@@ -8,7 +8,7 @@ namespace QuizApp.Application.Services
 {
     public interface IAuthService
     {
-        Task<Token> LoginAsync(LoginCommand request);
+        Task<TokenDto> LoginAsync(LoginCommand request);
         Task ConfirmMail(ConfirmMailCommand request);
         Task GetPasswordReset(GetPasswordResetQuery request);
         Task PasswordResetConfirm(ResetPasswordCommand request);
