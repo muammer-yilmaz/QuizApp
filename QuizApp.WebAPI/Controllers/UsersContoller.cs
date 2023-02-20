@@ -16,13 +16,15 @@ namespace QuizApp.WebAPI.Controllers
         {
 
         }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);
         }
-        [SwaggerOperation(Summary = "**This action requires authentication**")]
+
+        [SwaggerOperation(Summary = "** this action requires Authentication **")]
         [Authorize]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetUserProfile()
@@ -38,7 +40,8 @@ namespace QuizApp.WebAPI.Controllers
             var response = await _mediator.Send(new GetAllUsersQuery());
             return Ok(response);
         }
-        [SwaggerOperation(Summary = "**This action requires authentication**")]
+
+        [SwaggerOperation(Summary = "** this action requires Authentication **")]
         [Authorize]
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand request)
@@ -47,7 +50,7 @@ namespace QuizApp.WebAPI.Controllers
             return Ok(response);
         }
 
-        [SwaggerOperation(Summary = "**This action requires authentication**")]
+        [SwaggerOperation(Summary = "** this action requires Authentication **")]
         [Authorize]
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommand request)

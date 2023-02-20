@@ -2,5 +2,5 @@
 
 public sealed record GetAllCategoriesQueryResponse
 {
-    public List<Domain.Entities.Category> Categories { get; set; }
+    public List<CategoryDto> Categories { get; set; }
 }

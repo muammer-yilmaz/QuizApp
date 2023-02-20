@@ -14,6 +14,10 @@ public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery,
 
     public async Task<GetAllCategoriesQueryResponse> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
-        return await _categoryService.GetAllCategories(request);
+        var result = await _categoryService.GetAllCategories(request);
+        return new()
+        {
+            Categories = result
+        };
     }
 }

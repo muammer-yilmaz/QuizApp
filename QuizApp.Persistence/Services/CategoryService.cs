@@ -37,13 +37,17 @@ public class CategoryService : ICategoryService
         await _writeRepository.SaveAsync();
     }
 
-    public async Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request)
+    public async Task<List<CategoryDto>> GetAllCategories(GetAllCategoriesQuery request)
     {
-        var result = await _readRepository.GetAll().ToListAsync();
-        return new GetAllCategoriesQueryResponse()
-        {
-            Categories = result
-        };
+        List<CategoryDto> categories = await _readRepository
+            .GetAll()
+            .Select(x => new CategoryDto
+            {
+                Id = x.Id,
+                CategoryName = x.CategoryName,
+            })
+            .ToListAsync();
+        return categories;
     }
 
     private async Task CheckIfCategoryNameExists(string categoryName)

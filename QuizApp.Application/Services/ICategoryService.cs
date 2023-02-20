@@ -8,6 +8,6 @@ namespace QuizApp.Application.Services
     {
         public Task CreateCategory(CreateCategoryCommand request);
         public Task DeleteCategory(DeleteCategoryCommand request);
-        public Task<GetAllCategoriesQueryResponse> GetAllCategories(GetAllCategoriesQuery request);
+        public Task<List<CategoryDto>> GetAllCategories(GetAllCategoriesQuery request);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.Consts;
@@ -33,8 +32,8 @@ public class QuizService : IQuizService
     public async Task CreateQuizAsync(CreateQuizCommand request)
     {
         var mappedQuiz = _mapper.Map<Quiz>(request);
-        mappedQuiz.UserId = request.UserId;
-        //var smth = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication);
+        mappedQuiz.UserId = GetIdFromContext();
+
         var result = await _writeRepository.AddAsync(mappedQuiz);
         if (!result)
             throw new Exception(Messages.AddFailure);
@@ -64,7 +63,7 @@ public class QuizService : IQuizService
     public async Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request)
     {
         var result = await _readRepository.GetAll(false)
-            .Skip((request.Page - 1) * (int) request.PageSize)
+            .Skip((request.Page - 1) * (int)request.PageSize)
             .Take((int)request.PageSize)
             .ToListAsync();
         var mapped = _mapper.Map<List<QuizInfoDto>>(result);
@@ -130,4 +129,13 @@ public class QuizService : IQuizService
         return result;
     }
 
+    private string GetIdFromContext()
+    {
+        var userId = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication).Value;
+        if (userId == null)
+            throw new AuthorizationException(Messages.NoAuth);
+        return userId;
+    }
+
 }
+
