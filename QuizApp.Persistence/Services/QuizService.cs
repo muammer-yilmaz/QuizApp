@@ -7,6 +7,7 @@ using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
+using QuizApp.Application.Features.Quiz.Queries.GetUserQuizzes;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
@@ -109,6 +110,8 @@ public class QuizService : IQuizService
 
     public async Task<QuizDetailsDto> GetQuizByIdAsync(string id)
     {
+        await CheckIfQuizNotExists(id);
+
         var query = _readRepository.GetWhere(p => p.Id == id);
 
         var result = await query
@@ -119,6 +122,22 @@ public class QuizService : IQuizService
         var mapped = _mapper.Map<QuizDetailsDto>(result);
         mapped.CategoryName = result?.Category?.CategoryName;
         return mapped;
+    }
+    public async Task<GetUserQuizzesQueryResponse> GetUserQuizzes()
+    {
+        var userId = GetIdFromContext();
+        var result = await _readRepository.GetWhere(p => p.UserId == userId, false)
+            .Select(p => new QuizInfoDto
+            {
+                QuizId = p.Id,
+                Title = p.Description,
+                Description = p.Description
+            })
+            .ToListAsync();
+        return new()
+        {
+            Quizzes = result
+        };
     }
 
     private async Task<Quiz> CheckIfQuizNotExists(string quizId)
@@ -136,6 +155,7 @@ public class QuizService : IQuizService
             throw new AuthorizationException(Messages.NoAuth);
         return userId;
     }
+
 
 }
 
