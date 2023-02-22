@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Abstraction.Email;
+using QuizApp.Application.Abstraction.File;
 using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
+using QuizApp.Application.Features.User.Commands.UploadImage;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Application.Services;
@@ -24,13 +26,15 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IMailService _mailService;
     private readonly IHttpContextAccessor _httpContext;
+    private readonly IImageService _imageService;
 
-    public UserService(UserManager<AppUser> userManager, IMapper mapper, IMailService mailService, IHttpContextAccessor httpContextAccessor)
+    public UserService(UserManager<AppUser> userManager, IMapper mapper, IMailService mailService, IHttpContextAccessor httpContextAccessor, IImageService imageService)
     {
         _userManager = userManager;
         _mapper = mapper;
         _mailService = mailService;
         _httpContext = httpContextAccessor;
+        _imageService = imageService;
     }
 
     public async Task CreateAsync(CreateUserCommand request)
@@ -89,6 +93,14 @@ public class UserService : IUserService
         var errors = result.Errors.ToDictionary(x => x.Code, x => x.Description);
         throw new IdentityException(errors);
     }
+    public async Task UploadProfilePicture(UploadImageCommand request)
+    {
+        var userId = GetIdFromContext();
+        var uploadResponse = await _imageService.UploadImage(request.image,userId);
+        var user = await _userManager.FindByIdAsync(userId);
+        user.Biography = uploadResponse;
+        await _userManager.UpdateAsync(user);
+    }
 
     private async Task SendConfirmationEmail(AppUser user)
     {
@@ -139,5 +151,6 @@ public class UserService : IUserService
         }
         return result;
     }
+
 
 }

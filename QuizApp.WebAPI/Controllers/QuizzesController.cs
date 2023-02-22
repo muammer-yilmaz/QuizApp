@@ -10,7 +10,6 @@ using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
 using QuizApp.Application.Features.Quiz.Queries.GetUserQuizzes;
 using QuizApp.Application.Repositories;
-using QuizApp.Persistence.Repositories;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace QuizApp.WebAPI.Controllers;
@@ -76,6 +75,7 @@ public class QuizzesController : ApiController
     [HttpPut("[action]")]
     public async Task<IActionResult> Update([FromBody] UpdateQuizCommand request)
     {
+        
         var response = await _mediator.Send(request);
         return Ok(response);
     }

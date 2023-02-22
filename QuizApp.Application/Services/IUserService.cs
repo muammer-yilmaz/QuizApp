@@ -1,6 +1,7 @@
 ﻿using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
+using QuizApp.Application.Features.User.Commands.UploadImage;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 
@@ -13,4 +14,5 @@ public interface IUserService
     Task UpdatePassword(UpdatePasswordCommand request);
     Task<GetUserQueryResponse> GetUserById(GetUserQuery request);
     Task<GetAllUsersQueryResponse> GetAllUsers(GetAllUsersQuery request);
+    Task UploadProfilePicture(UploadImageCommand request);
 }

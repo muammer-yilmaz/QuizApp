@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
+using QuizApp.Application.Features.User.Commands.UploadImage;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuizApp.WebAPI.Controllers;
 
@@ -56,6 +58,15 @@ public class UsersController : ApiController
     public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommand request)
     {
         var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [Authorize]
+    [HttpPost("[action]")]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile image)
+    {
+        var response = await _mediator.Send(new UploadImageCommand(image));
         return Ok(response);
     }
 }

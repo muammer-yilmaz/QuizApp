@@ -19,5 +19,7 @@ public static class Messages
     public const string OptionsCanHaveOnlyOneTrueAnswer = "Options can only have one true answer.";
     public const string OptionAlreadyFalse = "This option is already false.";
     public const string OptionAlreadyTrue = "This option is already true.";
-
+    public const string ImageUploadSuccessful = "Image uploaded sucessfully.";
+    public const string UnsupportedExtension = "File extension not supported. Only '.jpg','.jpeg','.png' extensions accepted.";
+    public const string MaximumFileSizeExceeded = "Maximum allowable file size exceeded. Maximum 2.5 Mb accepted.";
 }
