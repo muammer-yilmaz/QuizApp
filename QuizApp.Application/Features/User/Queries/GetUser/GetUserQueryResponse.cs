@@ -7,4 +7,5 @@ public sealed record GetUserQueryResponse()
     public string LastName { get; set; }
     public int Score { get; set; }
     public string Biography { get; set; }
+    public string ProfilePictureUrl { get; set; }
 }

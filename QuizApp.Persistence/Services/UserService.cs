@@ -39,12 +39,11 @@ public class UserService : IUserService
 
     public async Task CreateAsync(CreateUserCommand request)
     {
-        await CheckIfEmailRegistered(request.EMail);
-        await CheckIfUserNameRegistered(request.UserName);
-
-
+        await CheckIfAccountRegistered(request.Email, request.UserName);
         var user = _mapper.Map<AppUser>(request);
         user.Id = Guid.NewGuid().ToString();
+        var imageUrl = await _imageService.UploadImage($"http://api.dicebear.com/5.x/identicon/svg?seed={user.Id}&size=512", user.Id);
+        user.ProfilePictureUrl = imageUrl;
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
@@ -98,7 +97,7 @@ public class UserService : IUserService
         var userId = GetIdFromContext();
         var uploadResponse = await _imageService.UploadImage(request.image,userId);
         var user = await _userManager.FindByIdAsync(userId);
-        user.Biography = uploadResponse;
+        user.ProfilePictureUrl = uploadResponse;
         await _userManager.UpdateAsync(user);
     }
 
@@ -114,21 +113,15 @@ public class UserService : IUserService
         await _mailService.SendEmailConfirmationMail(request, encoded);
     }
 
-    private async Task CheckIfEmailRegistered(string email)
+    private async Task CheckIfAccountRegistered(string email, string userName)
     {
-        var result = await _userManager.FindByEmailAsync(email);
+        var result = await _userManager.Users
+            .Where(p => p.UserName == userName)
+            .Where(p => p.Email == email)
+            .FirstOrDefaultAsync();
         if (result != null)
         {
-            throw new BusinessException(Messages.DuplicateObject("Email"));
-        }
-    }
-
-    private async Task CheckIfUserNameRegistered(string userName)
-    {
-        var result = await _userManager.FindByNameAsync(userName);
-        if (result != null)
-        {
-            throw new BusinessException(Messages.DuplicateObject("Username"));
+            throw new BusinessException(Messages.DuplicateObject("Email or Username"));
         }
     }
 

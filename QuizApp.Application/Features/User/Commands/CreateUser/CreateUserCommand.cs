@@ -4,7 +4,7 @@ namespace QuizApp.Application.Features.User.Commands.CreateUser
 {
     public sealed record CreateUserCommand(
         string UserName,
-        string EMail,
+        string Email,
         string Password
         ) : ICommand<CreateUserCommandResponse>;
 }

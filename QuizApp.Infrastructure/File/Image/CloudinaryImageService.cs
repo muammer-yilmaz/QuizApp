@@ -34,6 +34,22 @@ public class CloudinaryImageService : IImageService
         return result.SecureUrl.ToString();
     }
 
+    public async Task<string> UploadImage(string imageUrl, string publicId)
+    {
+        var parameters = new ImageUploadParams()
+        {
+            File = new FileDescription(imageUrl),
+            PublicId = $"profiles/{publicId}",
+            Overwrite = true,
+            UseFilename = false,
+            Format = "png" 
+        };
+        var result = await _cloudinary.UploadAsync(parameters);
+        return result.SecureUrl.ToString();
+    }
+
+
+
     public Task DeleteImage(string id)
     {
         throw new NotImplementedException();
