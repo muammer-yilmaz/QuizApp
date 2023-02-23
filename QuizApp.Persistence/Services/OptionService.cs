@@ -42,6 +42,7 @@ public class OptionService : IOptionService
 
 
         var mapped = _mapper.Map<List<Option>>(request.Options);
+        mapped.ForEach(x => x.QuestionId = request.QuestionId);
         await _optionWriteRepository.AddRangeAsync(mapped);
         await _optionWriteRepository.SaveAsync();
     }
