@@ -64,6 +64,9 @@ public class QuizzesController : ApiController
         var response = await _mediator.Send(request);
         return Ok(response);
     }
+
+    [Authorize]
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpDelete("[action]/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -72,6 +75,8 @@ public class QuizzesController : ApiController
         return NoContent();
     }
 
+    [Authorize]
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
     public async Task<IActionResult> Update([FromBody] UpdateQuizCommand request)
     {

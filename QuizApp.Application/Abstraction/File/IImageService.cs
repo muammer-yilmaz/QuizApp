@@ -6,5 +6,5 @@ public interface IImageService
 {
     public Task<string> UploadImage(IFormFile image,string publicId);
     public Task<string> UploadImage(string imageUrl,string publicId);
-    public Task DeleteImage(string id);
+    public Task<bool> DeleteImage(string id);
 }

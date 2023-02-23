@@ -43,13 +43,25 @@ public class QuizService : IQuizService
 
     public async Task DeleteQuizAsync(string id)
     {
-        await _writeRepository.RemoveAsync(id);
+        var quiz = await CheckIfQuizExists(id);
+        var userId = GetIdFromContext();
+        if (quiz.UserId != userId)
+        {
+            throw new BusinessException(Messages.UnAuthorizedOperation("quiz", "delete"));
+        }
+        _writeRepository.Remove(quiz);
         await _writeRepository.SaveAsync();
     }
 
     public async Task UpdateQuizAsync(UpdateQuizCommand request)
     {
-        var quiz = await CheckIfQuizNotExists(request.Id);
+        // TODO : Check for ownership before update for all updates
+        var quiz = await CheckIfQuizExists(request.Id);
+        var userId = GetIdFromContext();
+        if(quiz.UserId != userId)
+        {
+            throw new BusinessException(Messages.UnAuthorizedOperation("quiz", "update"));
+        }
         var mapped = _mapper.Map(request, quiz);
         _writeRepository.Update(mapped);
         await _writeRepository.SaveAsync();
@@ -110,7 +122,7 @@ public class QuizService : IQuizService
 
     public async Task<QuizDetailsDto> GetQuizByIdAsync(string id)
     {
-        await CheckIfQuizNotExists(id);
+        await CheckIfQuizExists(id);
 
         var query = _readRepository.GetWhere(p => p.Id == id);
 
@@ -123,6 +135,7 @@ public class QuizService : IQuizService
         mapped.CategoryName = result?.Category?.CategoryName;
         return mapped;
     }
+
     public async Task<GetUserQuizzesQueryResponse> GetUserQuizzes()
     {
         var userId = GetIdFromContext();
@@ -140,7 +153,16 @@ public class QuizService : IQuizService
         };
     }
 
-    private async Task<Quiz> CheckIfQuizNotExists(string quizId)
+    public async Task CheckOwnerShip(string quizId, string userId)
+    {
+        var quiz = await CheckIfQuizExists(quizId);
+        if(quiz.UserId != userId)
+        {
+            throw new AuthorizationException(Messages.NoAuth);
+        }
+    }
+
+    private async Task<Quiz> CheckIfQuizExists(string quizId)
     {
         var result = await _readRepository.GetByIdAsync(quizId);
         if (result == null)

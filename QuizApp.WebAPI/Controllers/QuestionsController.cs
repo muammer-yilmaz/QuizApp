@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Features.Question.Commands.CreateQuestion;
 using QuizApp.Application.Features.Question.Commands.DeleteQuestion;
 using QuizApp.Application.Features.Question.Commands.UpdateQuestion;
+using QuizApp.Application.Features.Question.Queries.GetQuestionList;
 
 namespace QuizApp.WebAPI.Controllers;
 
@@ -10,6 +11,13 @@ public class QuestionsController : ApiController
 {
     public QuestionsController(IMediator mediator) : base(mediator)
     {
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult<GetQuestionListQueryResponse>> GetQuestionList([FromQuery] string quizId)
+    {
+        var response = await _mediator.Send(new GetQuestionListQuery(quizId));
+        return Ok(response);
     }
 
     [HttpPost("[action]")]

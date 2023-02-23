@@ -50,9 +50,14 @@ public class CloudinaryImageService : IImageService
 
 
 
-    public Task DeleteImage(string id)
+    public async Task<bool> DeleteImage(string id)
     {
-        throw new NotImplementedException();
+        var parameters = new DeletionParams(id)
+        {
+            PublicId = $"profiles/{id}",
+        };
+        var result = await _cloudinary.DestroyAsync(parameters);
+        return result.Result == "ok" ? true : false;
     }
 
 

@@ -42,7 +42,7 @@ public class UserService : IUserService
         await CheckIfAccountRegistered(request.Email, request.UserName);
         var user = _mapper.Map<AppUser>(request);
         user.Id = Guid.NewGuid().ToString();
-        var imageUrl = await _imageService.UploadImage($"http://api.dicebear.com/5.x/identicon/svg?seed={user.Id}&size=512", user.Id);
+        var imageUrl = await _imageService.UploadImage(Messages.GenerateRandomImage(user.Id), user.Id);
         user.ProfilePictureUrl = imageUrl;
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)

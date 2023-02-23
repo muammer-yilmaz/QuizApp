@@ -1,24 +1,33 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Application.Abstraction.File;
 using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
 using QuizApp.Application.Features.User.Commands.UploadImage;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
+using QuizApp.Domain.Entities.Identity;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuizApp.WebAPI.Controllers;
 
+[Authorize]
 public class UsersController : ApiController
 {
-    public UsersController(IMediator mediator) : base(mediator)
-    {
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IImageService _imageService;
 
+    public UsersController(IMediator mediator, UserManager<AppUser> userManager, IImageService imageService) : base(mediator)
+    {
+        _userManager = userManager;
+        _imageService = imageService;
     }
 
+    [AllowAnonymous]
     [HttpPost("[action]")]
     public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
     {
@@ -27,7 +36,6 @@ public class UsersController : ApiController
     }
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
-    [Authorize]
     [HttpGet("[action]")]
     public async Task<IActionResult> GetUserProfile()
     {
@@ -36,6 +44,7 @@ public class UsersController : ApiController
         return Ok(response);
     }
 
+    [AllowAnonymous]
     [HttpGet("[action]")]
     public async Task<IActionResult> GetAll()
     {
@@ -44,7 +53,6 @@ public class UsersController : ApiController
     }
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
-    [Authorize]
     [HttpPut("[action]")]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand request)
     {
@@ -53,7 +61,6 @@ public class UsersController : ApiController
     }
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
-    [Authorize]
     [HttpPut("[action]")]
     public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommand request)
     {
@@ -62,11 +69,28 @@ public class UsersController : ApiController
     }
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
-    [Authorize]
     [HttpPost("[action]")]
     public async Task<IActionResult> UploadProfilePicture(IFormFile image)
     {
         var response = await _mediator.Send(new UploadImageCommand(image));
         return Ok(response);
+    }
+
+    [AllowAnonymous]
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteUser(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            return BadRequest("Kullanıcı bulunamadı");
+        }
+        var result = await _userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            var isDeleted = await _imageService.DeleteImage(userId);
+            return isDeleted ? NoContent() : BadRequest();
+        }
+        return BadRequest();
     }
 }

@@ -6,6 +6,11 @@ public static class Messages
     public static string CreateSuccessful(string field) => $"{field} successfully created.";
     public static string UpdateSuccessful(string field) => $"{field} successfully updated.";
     public static string DuplicateObject(string field) => $"{field} already exists.";
+    public static string UnAuthorizedOperation(string field, string operation) 
+        => $"Only the owner of the {field} can perform {operation} action.";
+
+    public static string GenerateRandomImage(string userId)
+        => $"http://api.dicebear.com/5.x/identicon/svg?seed={userId}&size=256";
 
     public const string QuestionOptionMaxed = "A Question can have a maximum of 4 options.";
     public const string QuestionOptionAllFalse = "The question must have at least one correct answer.";
