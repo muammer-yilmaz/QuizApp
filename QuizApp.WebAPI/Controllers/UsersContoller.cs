@@ -29,7 +29,7 @@ public class UsersController : ApiController
 
     [AllowAnonymous]
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
+    public async Task<ActionResult<CreateUserCommandResponse>> Create([FromBody] CreateUserCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -37,7 +37,7 @@ public class UsersController : ApiController
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetUserProfile()
+    public async Task<ActionResult<GetUserQueryResponse>> GetUserProfile()
     {
         GetUserQuery query = new();
         var response = await _mediator.Send(query);
@@ -46,7 +46,7 @@ public class UsersController : ApiController
 
     [AllowAnonymous]
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<GetAllUsersQueryResponse>> GetAll()
     {
         var response = await _mediator.Send(new GetAllUsersQuery());
         return Ok(response);
@@ -54,7 +54,7 @@ public class UsersController : ApiController
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand request)
+    public async Task<ActionResult<UpdateProfileCommandResponse>> UpdateProfile([FromBody] UpdateProfileCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -62,7 +62,7 @@ public class UsersController : ApiController
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
-    public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommand request)
+    public async Task<ActionResult<UpdatePasswordCommandResponse>> UpdatePassword([FromBody] UpdatePasswordCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -70,7 +70,7 @@ public class UsersController : ApiController
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPost("[action]")]
-    public async Task<IActionResult> UploadProfilePicture(IFormFile image)
+    public async Task<ActionResult<UploadImageCommandResponse>> UploadProfilePicture(IFormFile image)
     {
         var response = await _mediator.Send(new UploadImageCommand(image));
         return Ok(response);
@@ -78,6 +78,7 @@ public class UsersController : ApiController
 
     [AllowAnonymous]
     [HttpDelete("[action]")]
+    [SwaggerOperation(Summary = "!!!!! Use this method to delete user from DB also deletes Image from cloudinary !!!!!")]
     public async Task<IActionResult> DeleteUser(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);

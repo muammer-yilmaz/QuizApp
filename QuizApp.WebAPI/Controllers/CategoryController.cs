@@ -13,14 +13,14 @@ public class CategoryController : ApiController
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<GetAllCategoriesQueryResponse>> GetAll()
     {
         var response = await _mediator.Send(new GetAllCategoriesQuery());
         return Ok(response);
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create([FromBody] CreateCategoryCommand request)
+    public async Task<ActionResult<CreateCategoryCommandResponse>> Create([FromBody] CreateCategoryCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

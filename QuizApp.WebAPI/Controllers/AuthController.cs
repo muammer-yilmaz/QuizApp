@@ -14,14 +14,14 @@ public class AuthController : ApiController
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Login([FromBody] LoginCommand request)
+    public async Task<ActionResult<LoginCommandResponse>> Login([FromBody] LoginCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> ConfirmMail([FromQuery] string email, [FromQuery] string token)
+    public async Task<ActionResult<ConfirmMailCommandResponse>> ConfirmMail([FromQuery] string email, [FromQuery] string token)
     {
         ConfirmMailCommand request = new(email, token);
         var response = await _mediator.Send(request);
@@ -29,7 +29,7 @@ public class AuthController : ApiController
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> PasswordResetMail([FromQuery] string email)
+    public async Task<ActionResult<GetPasswordResetQueryResponse>> PasswordResetMail([FromQuery] string email)
     {
         GetPasswordResetQuery request = new(email);
         var response = await _mediator.Send(request);
@@ -37,7 +37,7 @@ public class AuthController : ApiController
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] NewPasswordDto newPassword)
+    public async Task<ActionResult<ResetPasswordCommandResponse>> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] NewPasswordDto newPassword)
     {
         ResetPasswordCommand request = new(email, token, newPassword.NewPassword);
         var response = await _mediator.Send(request);

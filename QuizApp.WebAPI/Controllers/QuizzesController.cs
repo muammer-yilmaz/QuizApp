@@ -23,17 +23,17 @@ public class QuizzesController : ApiController
     }
 
     [HttpGet("[action]")]
-    [SwaggerOperation(Summary = "** Pagination **" )]
-    public async Task<IActionResult> GetQuizList([FromQuery] PaginationRequestDto pagination)
+    [SwaggerOperation(Summary = "** Pagination **")]
+    public async Task<ActionResult<GetAllQuizzesQueryResponse>> GetQuizList([FromQuery] PaginationRequestDto pagination)
     {
-        GetAllQuizzesQuery query = new(String.Empty,pagination);
+        GetAllQuizzesQuery query = new(String.Empty, pagination);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
 
     [HttpGet("[action]")]
     [SwaggerOperation(Summary = "** Pagination **")]
-    public async Task<IActionResult> SearchQuiz([FromQuery] string search, [FromQuery] PaginationRequestDto pagination)
+    public async Task<ActionResult<GetAllQuizzesQueryResponse>> SearchQuiz([FromQuery] string search, [FromQuery] PaginationRequestDto pagination)
     {
         GetAllQuizzesQuery query = new(search, pagination);
         var response = await _mediator.Send(query);
@@ -41,7 +41,7 @@ public class QuizzesController : ApiController
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetQuizDetails([FromQuery] GetQuizDetailsQuery request)
+    public async Task<ActionResult<GetQuizDetailsQueryResponse>> GetQuizDetails([FromQuery] GetQuizDetailsQuery request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -50,7 +50,7 @@ public class QuizzesController : ApiController
     [Authorize]
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetUserQuizzes()
+    public async Task<ActionResult<GetUserQuizzesQueryResponse>> GetUserQuizzes()
     {
         var response = await _mediator.Send(new GetUserQuizzesQuery());
         return Ok(response);
@@ -59,7 +59,7 @@ public class QuizzesController : ApiController
     [Authorize]
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create([FromBody] CreateQuizCommand request)
+    public async Task<ActionResult<CreateQuizCommandResponse>> Create([FromBody] CreateQuizCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -78,15 +78,15 @@ public class QuizzesController : ApiController
     [Authorize]
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
-    public async Task<IActionResult> Update([FromBody] UpdateQuizCommand request)
+    public async Task<ActionResult<UpdateQuizCommandResponse>> Update([FromBody] UpdateQuizCommand request)
     {
-        
+
         var response = await _mediator.Send(request);
         return Ok(response);
     }
 
     [HttpGet("GetQuizValuesFromDb")]
-    [SwaggerOperation(Summary ="This method queries all fields of a single quiz from db")]
+    [SwaggerOperation(Summary = "This method queries all fields of a single quiz from db")]
     public async Task<IActionResult> GetValues(string id)
     {
         var query = _quizReadRepository.GetWhere(p => p.Id == id);

@@ -27,7 +27,7 @@ public class OptionsController : ApiController
 
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create([FromBody] CreateOptionCommand request)
+    public async Task<ActionResult<CreateOptionCommandResponse>> Create([FromBody] CreateOptionCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -42,14 +42,14 @@ public class OptionsController : ApiController
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> Update([FromBody] UpdateOptionCommand request)
+    public async Task<ActionResult<UpdateOptionCommandResponse>> Update([FromBody] UpdateOptionCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> UpdateAnswer([FromBody] UpdateAnswerCommand request)
+    public async Task<ActionResult<UpdateAnswerCommandResponse>> UpdateAnswer([FromBody] UpdateAnswerCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

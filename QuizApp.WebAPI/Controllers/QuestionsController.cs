@@ -21,7 +21,7 @@ public class QuestionsController : ApiController
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create([FromBody] CreateQuestionCommand request)
+    public async Task<ActionResult<CreateQuestionCommandResponse>> Create([FromBody] CreateQuestionCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
@@ -36,7 +36,7 @@ public class QuestionsController : ApiController
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> Update([FromBody] UpdateQuestionCommand request)
+    public async Task<ActionResult<UpdateQuestionCommandResponse>> Update([FromBody] UpdateQuestionCommand request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
