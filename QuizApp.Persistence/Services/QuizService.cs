@@ -153,13 +153,13 @@ public class QuizService : IQuizService
         };
     }
 
-    public async Task CheckOwnerShip(string quizId, string userId)
+    public async Task<bool> CheckOwnerShip(string quizId)
     {
+        var userId = GetIdFromContext();
         var quiz = await CheckIfQuizExists(quizId);
-        if(quiz.UserId != userId)
-        {
-            throw new AuthorizationException(Messages.NoAuth);
-        }
+        if (quiz.UserId != userId)
+            return false;
+        return true;
     }
 
     private async Task<Quiz> CheckIfQuizExists(string quizId)

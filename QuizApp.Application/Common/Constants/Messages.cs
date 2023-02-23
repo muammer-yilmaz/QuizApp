@@ -6,6 +6,7 @@ public static class Messages
     public static string CreateSuccessful(string field) => $"{field} successfully created.";
     public static string UpdateSuccessful(string field) => $"{field} successfully updated.";
     public static string DuplicateObject(string field) => $"{field} already exists.";
+    
     public static string UnAuthorizedOperation(string field, string operation) 
         => $"Only the owner of the {field} can perform {operation} action.";
 
@@ -27,4 +28,7 @@ public static class Messages
     public const string ImageUploadSuccessful = "Image uploaded sucessfully.";
     public const string UnsupportedExtension = "File extension not supported. Only '.jpg','.jpeg','.png' extensions accepted.";
     public const string MaximumFileSizeExceeded = "Maximum allowable file size exceeded. Maximum 2.5 Mb accepted.";
+    public const string MinimumOptionsForQuestionLimit = "A question must have minimum of 2 options.";
+    public const string OptionTrueAnswerDeletionNotAllowed = "True answer for the question cannot be deleted.";
+    public const string MaximumQuestionCountForQuiz = "The maximum number of questions this quiz can have has been exceeded.";
 }

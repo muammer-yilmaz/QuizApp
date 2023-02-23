@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace QuizApp.WebAPI.Controllers;
 
+[Authorize]
 public class OptionsController : ApiController
 {
     public OptionsController(IMediator mediator) : base(mediator)
@@ -17,7 +18,6 @@ public class OptionsController : ApiController
     }
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
-    [Authorize]
     [HttpGet("[action]")]
     public async Task<ActionResult<GetOptionListQueryResponse>> GetOptionList([FromQuery] string questionId)
     {
@@ -25,7 +25,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
-
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPost("[action]")]
     public async Task<ActionResult<CreateOptionCommandResponse>> Create([FromBody] CreateOptionCommand request)
     {
@@ -33,6 +33,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpDelete("[action]/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -41,6 +42,7 @@ public class OptionsController : ApiController
         return NoContent();
     }
 
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateOptionCommandResponse>> Update([FromBody] UpdateOptionCommand request)
     {
@@ -48,6 +50,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateAnswerCommandResponse>> UpdateAnswer([FromBody] UpdateAnswerCommand request)
     {

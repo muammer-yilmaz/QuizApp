@@ -17,17 +17,24 @@ public class QuestionService : IQuestionService
 {
     private readonly IQuestionWriteRepository _questionWriteRepository;
     private readonly IQuestionReadRepository _questionReadRepository;
+    private readonly IQuizService _quizService;
     private readonly IMapper _mapper;
 
-    public QuestionService(IQuestionWriteRepository writeRepository, IMapper mapper, IQuestionReadRepository readRepository)
+    public QuestionService(IQuestionWriteRepository writeRepository, IMapper mapper, IQuestionReadRepository readRepository, IQuizService quizService)
     {
         _questionWriteRepository = writeRepository;
         _mapper = mapper;
         _questionReadRepository = readRepository;
+        _quizService = quizService;
     }
 
     public async Task CreateQuestion(CreateQuestionCommand request)
     {
+        await CheckQuestionLimitForQuiz(request.QuizId);
+        var verifyResult = await VerifyOwnership(request.QuizId);
+        if (verifyResult == false)
+            throw new AuthorizationException(Messages.UnAuthorizedOperation("quiz", "create question"));
+
         var mapped = _mapper.Map<Question>(request);
         await _questionWriteRepository.AddAsync(mapped);
         await _questionWriteRepository.SaveAsync();
@@ -35,10 +42,29 @@ public class QuestionService : IQuestionService
 
     public async Task DeleteQuestion(DeleteQuestionCommand request)
     {
-        await CheckIfQuestionExists(request.Id);
-        await _questionWriteRepository.RemoveAsync(request.Id);
+        var verifyResult = await VerifyOwnership(request.Id);
+        if (verifyResult == false)
+            throw new AuthorizationException(Messages.UnAuthorizedOperation("quiz", "delete question"));
+
+        var question = await CheckIfQuestionExists(request.Id);
+        _questionWriteRepository.Remove(question);
         await _questionWriteRepository.SaveAsync();
     }
+
+    public async Task UpdateQuestion(UpdateQuestionCommand request)
+    {
+        var question = await CheckIfQuestionExists(request.Id);
+
+        var verifyResult = await VerifyOwnership(question.QuizId);
+        if (verifyResult == false)
+            throw new AuthorizationException(Messages.UnAuthorizedOperation("quiz", "update question"));
+
+        var mapped = _mapper.Map(request, question);
+
+        _questionWriteRepository.Update(mapped);
+        await _questionWriteRepository.SaveAsync();
+    }
+
 
     public async Task<List<QuestionInfoDto>> GetQuestionList(GetQuestionListQuery request)
     {
@@ -60,13 +86,13 @@ public class QuestionService : IQuestionService
         return question.QuizId;
     }
 
-    public async Task UpdateQuestion(UpdateQuestionCommand request)
+    private async Task CheckQuestionLimitForQuiz(string quizId)
     {
-        // TODO : Check ownership for Update
-        var question = await CheckIfQuestionExists(request.Id);
-        var mapped = _mapper.Map(request,question);
-        _questionWriteRepository.Update(mapped);
-        await _questionWriteRepository.SaveAsync();
+        var questionCount = await _questionReadRepository.GetAll(false)
+            .Where(p => p.QuizId == quizId)
+            .CountAsync();
+        if (questionCount > 20)
+            throw new BusinessException(Messages.MaximumQuestionCountForQuiz);
     }
 
     private async Task<Question> CheckIfQuestionExists(string id)
@@ -75,5 +101,10 @@ public class QuestionService : IQuestionService
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Question"));
         return result;
+    }
+
+    private async Task<bool> VerifyOwnership(string quizId)
+    {
+        return await _quizService.CheckOwnerShip(quizId);
     }
 }
