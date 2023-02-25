@@ -58,7 +58,7 @@ public class QuizService : IQuizService
         // TODO : Check for ownership before update for all updates
         var quiz = await CheckIfQuizExists(request.Id);
         var userId = GetIdFromContext();
-        if(quiz.UserId != userId)
+        if (quiz.UserId != userId)
         {
             throw new BusinessException(Messages.UnAuthorizedOperation("quiz", "update"));
         }
@@ -76,10 +76,18 @@ public class QuizService : IQuizService
     public async Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request)
     {
         var result = await _readRepository.GetAll(false)
+            .Include(p => p.Category)
             .Skip((request.Page - 1) * (int)request.PageSize)
             .Take((int)request.PageSize)
+            .Select(p => new QuizInfoDto
+            {
+                Description = p.Description,
+                QuizId = p.Id,
+                Title = p.Title,
+                CategoryName = p.Category.CategoryName
+            })
             .ToListAsync();
-        var mapped = _mapper.Map<List<QuizInfoDto>>(result);
+        //var mapped = _mapper.Map<List<QuizInfoDto>>(result);
         var totalCount = await _readRepository.Table.CountAsync();
         var totalPages = Math.Ceiling(totalCount / (double)request.PageSize);
 
@@ -87,7 +95,7 @@ public class QuizService : IQuizService
         {
             Quizzes = new()
             {
-                Records = mapped,
+                Records = result,
                 Page = request.Page,
                 PageSize = (int)request.PageSize,
                 TotalPages = (int)totalPages
