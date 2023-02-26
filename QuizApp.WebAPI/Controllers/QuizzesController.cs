@@ -9,6 +9,7 @@ using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
 using QuizApp.Application.Features.Quiz.Queries.GetUserQuizzes;
+using QuizApp.Application.Features.QuizAttemp.Commands.CreateAttempt;
 using QuizApp.Application.Repositories;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -63,6 +64,16 @@ public class QuizzesController : ApiController
     {
         var response = await _mediator.Send(request);
         return Ok(response);
+    }
+
+    [Authorize]
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [HttpPost("[action]")]
+    public async Task<ActionResult> StartQuiz([FromQuery] string quizId)
+    {
+        var attemptResponse = await _mediator.Send(new CreateAttemptCommand(quizId));
+        return RedirectToAction("GetQuestionList", "Questions", new { quizId = quizId});
+        return Redirect(nameof(GetQuizDetails)+"?id="+quizId);
     }
 
     [Authorize]

@@ -14,7 +14,7 @@ public class GetOptionListQueryHandler : IQueryHandler<GetOptionListQuery, GetOp
 
     public async Task<GetOptionListQueryResponse> Handle(GetOptionListQuery request, CancellationToken cancellationToken)
     {
-        var result = await _optionService.GetOptionList(request);
+        var result = await _optionService.GetOptionListOwner(request);
         return new()
         {
             Options = result

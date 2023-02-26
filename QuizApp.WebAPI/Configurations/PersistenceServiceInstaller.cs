@@ -6,6 +6,7 @@ using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
 using QuizApp.Persistence;
 using QuizApp.Persistence.Repositories;
+using QuizApp.Persistence.Repositories.QuizAttempt;
 using QuizApp.Persistence.Services;
 
 namespace QuizApp.WebAPI.Configurations;
@@ -44,11 +45,16 @@ public static class PersistenceServiceInstaller
         services.AddScoped<IOptionWriteRepository, OptionWriteRepository>();
         services.AddScoped<IOptionReadRepository, OptionReadRepository>();
 
+        services.AddScoped<IQuizAttemptWriteRepository, QuizAttemptWriteRepository>();
+        services.AddScoped<IQuizAttemptReadRepository, QuizAttemptReadRepository>();
+
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IQuizService, QuizService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IQuestionService, QuestionService>();
         services.AddScoped<IOptionService, OptionService>();
+        services.AddScoped<IQuizAttemptService, QuizAttemptService>();
     }
 }

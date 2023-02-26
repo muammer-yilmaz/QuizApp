@@ -89,7 +89,7 @@ public class OptionService : IOptionService
         await _optionWriteRepository.SaveAsync();
     }
 
-    public async Task<List<OptionInfoDto>> GetOptionList(GetOptionListQuery request)
+    public async Task<List<OptionOwnerInfoDto>> GetOptionListOwner(GetOptionListQuery request)
     {
         var ownerShipResult = await VerifyOwnerShip(request.QuestionId);
         if (ownerShipResult == false)
@@ -97,7 +97,7 @@ public class OptionService : IOptionService
 
         var result = await _optionReadRepository.GetAll()
             .Where(p => p.QuestionId == request.QuestionId)
-            .Select(p => new OptionInfoDto
+            .Select(p => new OptionOwnerInfoDto
             {
                 OptionId = p.Id,
                 Descripton = p.Description,

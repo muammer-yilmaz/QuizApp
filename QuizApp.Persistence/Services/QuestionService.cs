@@ -70,11 +70,17 @@ public class QuestionService : IQuestionService
     {
         var result = await _questionReadRepository.GetAll()
             .Where(p => p.QuizId == request.QuizId)
+            .Include(p => p.Options)
             .Select(p => new QuestionInfoDto()
             {
                 QuestionId = p.Id,
                 Title = p.Title,
-                Descripton = p.Description
+                Descripton = p.Description,
+                Options = p.Options.Select(p => new OptionInfoDto
+                {
+                    Descripton = p.Description,
+                    OptionId = p.Id
+                }).ToList(),
             })
             .ToListAsync();
         return result;

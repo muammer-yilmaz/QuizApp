@@ -20,8 +20,8 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<CreateUserCommand, AppUser>().ReverseMap();
-        CreateMap<UpdateProfileCommand, AppUser>().ReverseMap()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+        //CreateMap<UpdateProfileCommand, AppUser>().ReverseMap()
+        //    .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         
 
         CreateMap<QuizDetailsDto, Quiz>().ReverseMap();
@@ -43,6 +43,8 @@ public class MappingProfile : Profile
         CreateMap<CreateOptionDto, Option>();
         CreateMap<CreateOptionCommand, List<Option>>();
         CreateMap<UpdateOptionCommand, Option>();
+
+        
 
     }
 }

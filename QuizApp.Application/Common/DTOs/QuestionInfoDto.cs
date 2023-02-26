@@ -5,4 +5,5 @@ public class QuestionInfoDto
     public string QuestionId { get; set; }
     public string Title { get; set; }
     public string Descripton { get; set; }
+    public List<OptionInfoDto> Options { get; set; }
 }

@@ -55,7 +55,6 @@ public class QuizService : IQuizService
 
     public async Task UpdateQuizAsync(UpdateQuizCommand request)
     {
-        // TODO : Check for ownership before update for all updates
         var quiz = await CheckIfQuizExists(request.Id);
         var userId = GetIdFromContext();
         if (quiz.UserId != userId)

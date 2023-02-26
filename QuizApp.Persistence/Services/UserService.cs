@@ -77,8 +77,12 @@ public class UserService : IUserService
     public async Task UpdateProfile(UpdateProfileCommand request)
     {
         var user = await CheckUserWithId(GetIdFromContext());
-        var mapped = _mapper.Map(request, user);
-        await _userManager.UpdateAsync(mapped);
+
+        user.FirstName = request.FirstName ?? user.FirstName;
+        user.LastName = request.LastName ?? user.LastName;
+        user.Biography = request.Biography ?? user.Biography ;
+
+        await _userManager.UpdateAsync(user);
     }
 
     public async Task UpdatePassword(UpdatePasswordCommand request)

@@ -13,5 +13,5 @@ public interface IOptionService
     public Task DeleteOption(DeleteOptionCommand request);
     public Task UpdateOption(UpdateOptionCommand request);
     public Task UpdateAnswer(UpdateAnswerCommand request);
-    public Task<List<OptionInfoDto>> GetOptionList(GetOptionListQuery request);
+    public Task<List<OptionOwnerInfoDto>> GetOptionListOwner(GetOptionListQuery request);
 }

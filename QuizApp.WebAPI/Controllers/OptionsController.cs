@@ -19,7 +19,7 @@ public class OptionsController : ApiController
 
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpGet("[action]")]
-    public async Task<ActionResult<GetOptionListQueryResponse>> GetOptionList([FromQuery] string questionId)
+    public async Task<ActionResult<GetOptionListQueryResponse>> GetOptionListOwner([FromQuery] string questionId)
     {
         var response = await _mediator.Send(new GetOptionListQuery(questionId));
         return Ok(response);
