@@ -1,25 +1,25 @@
-﻿using QuizApp.Domain.Common;
+﻿namespace QuizApp.Application.Common.DTOs;
 
-namespace QuizApp.Application.Common.DTOs;
-
-public class QuizDetailsDto : BaseEntity
+public class QuizDetailsDto 
 {
+    public string QuizId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string CategoryName { get; set; }
-    public ICollection<QuestionsDto> Questions { get; set; }
+    public ICollection<QuizDetailQuestionsDto> Questions { get; set; }
 
 }
 
-public class QuestionsDto
+public class QuizDetailQuestionsDto
 {
+    public string QuestionId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public ICollection<OptionsDto> Options { get; set; }
+    public ICollection<QuizDetailOptionsDto> Options { get; set; }
 }
 
-public class OptionsDto
+public class QuizDetailOptionsDto
 {
+    public string OptionId { get; set; }
     public string Description { get; set; }
-    public bool IsAnswer { get; set; }
 }

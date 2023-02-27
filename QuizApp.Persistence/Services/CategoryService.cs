@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.Constants;
+using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Category.Commands.CreateCategory;
 using QuizApp.Application.Features.Category.Commands.DeleteCategory;

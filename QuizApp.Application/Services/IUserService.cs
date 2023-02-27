@@ -9,10 +9,11 @@ namespace QuizApp.Application.Services;
 
 public interface IUserService
 {
-    Task CreateAsync(CreateUserCommand request);
-    Task UpdateProfile(UpdateProfileCommand request);
-    Task UpdatePassword(UpdatePasswordCommand request);
-    Task<GetUserQueryResponse> GetUserById(GetUserQuery request);
-    Task<GetAllUsersQueryResponse> GetAllUsers(GetAllUsersQuery request);
-    Task UploadProfilePicture(UploadImageCommand request);
+    public Task CreateAsync(CreateUserCommand request);
+    public Task UpdateProfile(UpdateProfileCommand request);
+    public Task UpdatePassword(UpdatePasswordCommand request);
+    public Task<GetUserQueryResponse> GetUserById(GetUserQuery request);
+    public Task<GetAllUsersQueryResponse> GetAllUsers(GetAllUsersQuery request);
+    public Task UploadProfilePicture(UploadImageCommand request);
+    public Task UpdateScore(int score);
 }

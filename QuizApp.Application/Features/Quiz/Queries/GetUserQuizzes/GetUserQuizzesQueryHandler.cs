@@ -13,7 +13,7 @@ public GetUserQuizzesQueryHandler(IQuizService quizService)
 
     public async Task<GetUserQuizzesQueryResponse> Handle(GetUserQuizzesQuery request, CancellationToken cancellationToken)
     {
-        var response = await _quizService.GetUserQuizzes();
+        var response = await _quizService.GetUserQuizzesAsync();
         return response;
     }
 }

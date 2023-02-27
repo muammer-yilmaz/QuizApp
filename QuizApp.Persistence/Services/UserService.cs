@@ -149,5 +149,11 @@ public class UserService : IUserService
         return result;
     }
 
-
+    public async Task UpdateScore(int score)
+    {
+        var userId = GetIdFromContext();
+        var user = await CheckUserWithId(userId);
+        user.Score += score;
+        await _userManager.UpdateAsync(user);
+    }
 }

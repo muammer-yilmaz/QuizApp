@@ -20,17 +20,17 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<CreateUserCommand, AppUser>().ReverseMap();
+        CreateMap<AppUser, GetUserQueryResponse>();
         //CreateMap<UpdateProfileCommand, AppUser>().ReverseMap()
         //    .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        
 
-        CreateMap<QuizDetailsDto, Quiz>().ReverseMap();
-        CreateMap<QuestionsDto, Question>().ReverseMap();
-        CreateMap<OptionsDto, Option>().ReverseMap();
+
+        CreateMap<Quiz, QuizDetailsDto>().ForMember(p => p.QuizId, opt => opt.MapFrom(p => p.Id));
+        CreateMap<Question, QuizDetailQuestionsDto>().ForMember(p => p.QuestionId, opt => opt.MapFrom(p => p.Id));
+        CreateMap<Option, QuizDetailOptionsDto>().ForMember(p => p.OptionId, opt => opt.MapFrom(p => p.Id));
 
         CreateMap<Quiz, QuizInfoDto>().ForMember(x => x.QuizId , opt => opt.MapFrom(x => x.Id));
 
-        CreateMap<AppUser, GetUserQueryResponse>();
 
         CreateMap<CreateQuizCommand, Quiz>();
         CreateMap<UpdateQuizCommand, Quiz>();

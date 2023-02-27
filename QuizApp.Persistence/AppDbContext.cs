@@ -19,15 +19,6 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
     public DbSet<Category> Categories { get; set; }
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.Entity<QuizAttempt>(entity =>
-        {
-            entity.HasOne(p => p.Quiz).WithMany().OnDelete(DeleteBehavior.NoAction);
-            //entity.HasOne(p => p.QuizId).WithMany().OnDelete(DeleteBehavior.NoAction);
-        });
-        base.OnModelCreating(builder);
-    }
 
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -40,7 +31,6 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
             {
                 case EntityState.Added:
                     entry.Entity.CreatedDate = DateTime.UtcNow;
-                    //entry.Entity.Id = Guid.NewGuid().ToString();
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedDate = DateTime.UtcNow;

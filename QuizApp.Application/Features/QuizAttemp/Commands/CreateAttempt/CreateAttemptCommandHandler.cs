@@ -14,7 +14,7 @@ public class CreateAttemptCommandHandler : ICommandHandler<CreateAttemptCommand,
 
     public async Task<CreateAttemptCommandResponse> Handle(CreateAttemptCommand request, CancellationToken cancellationToken)
     {
-        await _quizAttemptService.CreateAttempt(request);
+        await _quizAttemptService.CreateAttempt(request.QuizId);
         return new();
     }
 }

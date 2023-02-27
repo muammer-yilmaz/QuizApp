@@ -1,4 +1,3 @@
-using QuizApp.Application.Abstraction.Token;
 using QuizApp.WebAPI.Configurations;
 using QuizApp.WebAPI.Middlewares;
 using System.Text.Json.Serialization;
@@ -14,6 +13,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+    //.AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonTrimConverter()));
 
 
 builder.Services.AddEndpointsApiExplorer();

@@ -14,4 +14,5 @@ public interface IOptionService
     public Task UpdateOption(UpdateOptionCommand request);
     public Task UpdateAnswer(UpdateAnswerCommand request);
     public Task<List<OptionOwnerInfoDto>> GetOptionListOwner(GetOptionListQuery request);
+    public Task<List<QuizFinishResultQuestionsDto>> CheckAnswers(List<QuizFinishQuestionsDto> questions);
 }

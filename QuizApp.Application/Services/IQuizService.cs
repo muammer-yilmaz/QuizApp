@@ -12,8 +12,9 @@ public interface IQuizService
     public Task DeleteQuizAsync(string id);
     public Task UpdateQuizAsync(UpdateQuizCommand request);
     public Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request);
-    public Task<GetAllQuizzesQueryResponse> SearchQuizzes(string searchText, PaginationRequestDto pagination);
-    public Task<QuizDetailsDto> GetQuizByIdAsync(string id);
-    public Task<GetUserQuizzesQueryResponse> GetUserQuizzes();
+    public Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination);
+    public Task<QuizDetailsDto> GetQuizDetailsAsync(string quizId);
+    public Task<GetUserQuizzesQueryResponse> GetUserQuizzesAsync();
     public Task<bool> CheckOwnerShip(string quizId);
+    public Task<int> CalculateScore(string quizId);
 }

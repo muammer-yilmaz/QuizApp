@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
@@ -35,7 +36,7 @@ public class OptionService : IOptionService
     {
         if (request.Options.FindAll(x => x.IsAnswer == true).Count != 1)
             throw new BusinessException(Messages.OptionsCanHaveOnlyOneTrueAnswer);
-       
+
         var ownerShipResult = await VerifyOwnerShip(request.QuestionId);
         if (ownerShipResult == false)
             throw new AuthorizationException(Messages.UnAuthorizedOperation("question", "create option"));
@@ -43,6 +44,7 @@ public class OptionService : IOptionService
 
         var mapped = _mapper.Map<List<Option>>(request.Options);
         mapped.ForEach(x => x.QuestionId = request.QuestionId);
+
         await _optionWriteRepository.AddRangeAsync(mapped);
         await _optionWriteRepository.SaveAsync();
     }
@@ -128,6 +130,40 @@ public class OptionService : IOptionService
         newOption.IsAnswer = newOption.IsAnswer == false ? true : throw new BusinessException(Messages.OptionAlreadyTrue);
 
         await _optionWriteRepository.SaveAsync();
+    }
+
+    public async Task<List<QuizFinishResultQuestionsDto>> CheckAnswers(List<QuizFinishQuestionsDto> questions)
+    {
+
+        var finishResult = new List<QuizFinishResultQuestionsDto>();
+
+        var questionIds = questions.Select(p => p.QuestionId).ToList();
+        var optionIds = questions.Select(p => p.SelectedOptionId).ToList();
+
+        var result = await _optionReadRepository.GetAll(false)
+            .Where(p => questionIds.Contains(p.QuestionId))
+            .Where(p => p.IsAnswer == true)
+            .ToListAsync();
+
+
+        foreach (var question in questions)
+        {
+            if (result.Any(x => x.QuestionId == question.QuestionId))
+            {
+                finishResult.Add(new()
+                {
+                    Title = question.Title,
+                    Description = question.Description,
+                    SelectedOptionDescription = question.SelectedOptionDescription,
+                    IsCorrect = result
+                        .FirstOrDefault(p => p.QuestionId == question.QuestionId)?.Description == question.SelectedOptionDescription,
+                });
+            }
+        }
+
+
+        return finishResult;
+
     }
 
     private async Task<Option> CheckIfOptionExists(string id)

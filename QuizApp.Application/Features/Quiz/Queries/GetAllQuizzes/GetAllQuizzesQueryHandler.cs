@@ -22,7 +22,7 @@ public class GetAllQuizzesQueryHandler : IQueryHandler<GetAllQuizzesQuery, GetAl
         else
         {
 
-            response = await _quizService.SearchQuizzes(request.SearchText, request.Pagination);
+            response = await _quizService.SearchQuizzesAsync(request.SearchText!, request.Pagination);
         }
         return response;
     }

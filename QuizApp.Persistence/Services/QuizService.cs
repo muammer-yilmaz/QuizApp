@@ -17,28 +17,31 @@ namespace QuizApp.Persistence.Services;
 
 public class QuizService : IQuizService
 {
-    private readonly IQuizWriteRepository _writeRepository;
-    private readonly IQuizReadRepository _readRepository;
+    private readonly IQuizWriteRepository _quizWriteRepository;
+    private readonly IQuizReadRepository _quizReadRepository;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContext;
 
-    public QuizService(IQuizWriteRepository quizWriteRepository, IMapper mapper, IHttpContextAccessor httpContext, IQuizReadRepository readRepository)
+    public QuizService(IQuizWriteRepository quizWriteRepository, IMapper mapper, IHttpContextAccessor httpContext, IQuizReadRepository quizReadRepository)
     {
-        _writeRepository = quizWriteRepository;
+        _quizWriteRepository = quizWriteRepository;
         _mapper = mapper;
         _httpContext = httpContext;
-        _readRepository = readRepository;
+        _quizReadRepository = quizReadRepository;
     }
-
+    // TODO : create Id leri dön
     public async Task CreateQuizAsync(CreateQuizCommand request)
     {
         var mappedQuiz = _mapper.Map<Quiz>(request);
         mappedQuiz.UserId = GetIdFromContext();
 
-        var result = await _writeRepository.AddAsync(mappedQuiz);
+        // TODO : Check later
+        mappedQuiz.Score = 100;
+        
+        var result = await _quizWriteRepository.AddAsync(mappedQuiz);
         if (!result)
             throw new Exception(Messages.AddFailure);
-        await _writeRepository.SaveAsync();
+        await _quizWriteRepository.SaveAsync();
     }
 
     public async Task DeleteQuizAsync(string id)
@@ -49,8 +52,8 @@ public class QuizService : IQuizService
         {
             throw new BusinessException(Messages.UnAuthorizedOperation("quiz", "delete"));
         }
-        _writeRepository.Remove(quiz);
-        await _writeRepository.SaveAsync();
+        _quizWriteRepository.Remove(quiz);
+        await _quizWriteRepository.SaveAsync();
     }
 
     public async Task UpdateQuizAsync(UpdateQuizCommand request)
@@ -62,19 +65,13 @@ public class QuizService : IQuizService
             throw new BusinessException(Messages.UnAuthorizedOperation("quiz", "update"));
         }
         var mapped = _mapper.Map(request, quiz);
-        _writeRepository.Update(mapped);
-        await _writeRepository.SaveAsync();
-    }
-
-    public async Task<List<Quiz>> GetAllQuizzesAsync()
-    {
-        var query = _readRepository.GetAll(false);
-        return await query.ToListAsync();
+        _quizWriteRepository.Update(mapped);
+        await _quizWriteRepository.SaveAsync();
     }
 
     public async Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request)
     {
-        var result = await _readRepository.GetAll(false)
+        var result = await _quizReadRepository.GetAll(false)
             .Include(p => p.Category)
             .Skip((request.Page - 1) * (int)request.PageSize)
             .Take((int)request.PageSize)
@@ -87,7 +84,7 @@ public class QuizService : IQuizService
             })
             .ToListAsync();
         //var mapped = _mapper.Map<List<QuizInfoDto>>(result);
-        var totalCount = await _readRepository.Table.CountAsync();
+        var totalCount = await _quizReadRepository.Table.CountAsync();
         var totalPages = Math.Ceiling(totalCount / (double)request.PageSize);
 
         GetAllQuizzesQueryResponse response = new()
@@ -103,15 +100,15 @@ public class QuizService : IQuizService
         return response;
     }
 
-    public async Task<GetAllQuizzesQueryResponse> SearchQuizzes(string searchText, PaginationRequestDto pagination)
+    public async Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination)
     {
-        var result = await _readRepository.GetAll(false)
+        var result = await _quizReadRepository.GetAll(false)
             .Where(p => p.Title.IndexOf(searchText) >= 0)
             .Skip((pagination.Page - 1) * (int)pagination.PageSize)
             .Take((int)pagination.PageSize)
             .ToListAsync();
         var mapped = _mapper.Map<List<QuizInfoDto>>(result);
-        var totalCount = await _readRepository.Table.Where(p => p.Title.IndexOf(searchText) >= 0).CountAsync();
+        var totalCount = await _quizReadRepository.Table.Where(p => p.Title.IndexOf(searchText) >= 0).CountAsync();
         var totalPages = Math.Ceiling(totalCount / (double)pagination.PageSize);
 
         GetAllQuizzesQueryResponse response = new()
@@ -127,26 +124,29 @@ public class QuizService : IQuizService
         return response;
     }
 
-    public async Task<QuizDetailsDto> GetQuizByIdAsync(string id)
+    public async Task<QuizDetailsDto> GetQuizDetailsAsync(string quizId)
     {
-        await CheckIfQuizExists(id);
 
-        var query = _readRepository.GetWhere(p => p.Id == id);
-
-        var result = await query
+        var result = await _quizReadRepository.GetAll(false)
+            .Where(p => p.Id == quizId)
             .Include(p => p.Category)
             .Include(p => p.Questions)
-            .ThenInclude(p => p.Options).FirstOrDefaultAsync();
+            .ThenInclude(p => p.Options)
+            .OrderBy(p => p.CreatedDate)
+            .FirstOrDefaultAsync();
+
+        if (result == null)
+            throw new NotFoundException(Messages.NotFound("Quiz"));
 
         var mapped = _mapper.Map<QuizDetailsDto>(result);
         mapped.CategoryName = result?.Category?.CategoryName;
         return mapped;
     }
 
-    public async Task<GetUserQuizzesQueryResponse> GetUserQuizzes()
+    public async Task<GetUserQuizzesQueryResponse> GetUserQuizzesAsync()
     {
         var userId = GetIdFromContext();
-        var result = await _readRepository.GetWhere(p => p.UserId == userId, false)
+        var result = await _quizReadRepository.GetWhere(p => p.UserId == userId, false)
             .Select(p => new QuizInfoDto
             {
                 QuizId = p.Id,
@@ -171,7 +171,7 @@ public class QuizService : IQuizService
 
     private async Task<Quiz> CheckIfQuizExists(string quizId)
     {
-        var result = await _readRepository.GetByIdAsync(quizId);
+        var result = await _quizReadRepository.GetByIdAsync(quizId);
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Quiz"));
         return result;
@@ -185,6 +185,11 @@ public class QuizService : IQuizService
         return userId;
     }
 
-
+    public async Task<int> CalculateScore(string quizId)
+    {
+        // TODO : later score calculation will change
+        var quiz = await CheckIfQuizExists(quizId);
+        return quiz.Score;
+    }
 }
 

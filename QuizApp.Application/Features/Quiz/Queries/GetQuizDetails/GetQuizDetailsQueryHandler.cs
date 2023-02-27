@@ -14,7 +14,7 @@ public class GetQuizDetailsQueryHandler : IQueryHandler<GetQuizDetailsQuery, Get
 
     public async Task<GetQuizDetailsQueryResponse> Handle(GetQuizDetailsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _quizService.GetQuizByIdAsync(request.Id);
+        var result = await _quizService.GetQuizDetailsAsync(request.Id);
         return new(result);
     }
 }

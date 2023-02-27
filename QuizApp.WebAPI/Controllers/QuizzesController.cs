@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
+using QuizApp.Application.Features.Quiz.Commands.FinishQuiz;
+using QuizApp.Application.Features.Quiz.Commands.StartQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
@@ -69,11 +71,19 @@ public class QuizzesController : ApiController
     [Authorize]
     [SwaggerOperation(Summary = "** this action requires Authentication **")]
     [HttpPost("[action]")]
-    public async Task<ActionResult> StartQuiz([FromQuery] string quizId)
+    public async Task<ActionResult<StartQuizCommandResponse>> StartQuiz([FromQuery] string quizId)
     {
-        var attemptResponse = await _mediator.Send(new CreateAttemptCommand(quizId));
-        return RedirectToAction("GetQuestionList", "Questions", new { quizId = quizId});
-        return Redirect(nameof(GetQuizDetails)+"?id="+quizId);
+        var response = await _mediator.Send(new StartQuizCommand(quizId));
+        return Ok(response);
+    }
+
+    [Authorize]
+    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [HttpPost("[action]")]
+    public async Task<ActionResult<FinishQuizCommandResponse>> FinishQuiz([FromBody] FinishQuizCommand request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 
     [Authorize]
