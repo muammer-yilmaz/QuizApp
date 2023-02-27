@@ -24,8 +24,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(p =>
+    {
+        p.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+    });
 }
+
+app.MapGet("/swagger-ui/SwaggerDark.css", async (CancellationToken cancellationToken) =>
+{
+    var css = await File.ReadAllBytesAsync("SwaggerDark.css", cancellationToken);
+    return Results.File(css, "text/css");
+}).ExcludeFromDescription();
 
 app.UseCors();
 

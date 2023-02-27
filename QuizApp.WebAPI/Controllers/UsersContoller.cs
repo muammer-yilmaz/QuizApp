@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Abstraction.File;
+using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
@@ -35,7 +36,7 @@ public class UsersController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpGet("[action]")]
     public async Task<ActionResult<GetUserQueryResponse>> GetUserProfile()
     {
@@ -52,7 +53,7 @@ public class UsersController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateProfileCommandResponse>> UpdateProfile([FromBody] UpdateProfileCommand request)
     {
@@ -60,7 +61,7 @@ public class UsersController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdatePasswordCommandResponse>> UpdatePassword([FromBody] UpdatePasswordCommand request)
     {
@@ -68,7 +69,7 @@ public class UsersController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPost("[action]")]
     public async Task<ActionResult<UploadImageCommandResponse>> UploadProfilePicture(IFormFile image)
     {

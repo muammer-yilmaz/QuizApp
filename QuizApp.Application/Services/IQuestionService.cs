@@ -8,7 +8,7 @@ namespace QuizApp.Application.Services;
 
 public interface IQuestionService
 {
-    public Task CreateQuestion(CreateQuestionCommand request);
+    public Task<string> CreateQuestion(CreateQuestionCommand request);
     public Task DeleteQuestion(DeleteQuestionCommand request);
     public Task UpdateQuestion(UpdateQuestionCommand request);
     public Task<List<QuestionInfoDto>> GetQuestionList(GetQuestionListQuery request);

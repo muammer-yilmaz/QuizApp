@@ -14,7 +14,10 @@ public class CreateQuizCommandHandler : ICommandHandler<CreateQuizCommand, Creat
 
     public async Task<CreateQuizCommandResponse> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
     {
-        await _quizService.CreateQuizAsync(request);
-        return new();
+        var quizId = await _quizService.CreateQuizAsync(request);
+        return new()
+        {
+            QuizId = quizId,
+        };
     }
 }

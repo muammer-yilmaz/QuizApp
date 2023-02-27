@@ -18,7 +18,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 
     public async Task<bool> AddAsync(T model)
     {
-        model.Id = Guid.NewGuid().ToString();
+        model.Id ??= Guid.NewGuid().ToString();
         var result = await Table.AddAsync(model);
         return result.State == EntityState.Added;
     }

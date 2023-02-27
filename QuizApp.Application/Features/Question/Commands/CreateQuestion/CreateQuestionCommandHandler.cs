@@ -14,7 +14,10 @@ public class CreateQuestionCommandHandler : ICommandHandler<CreateQuestionComman
 
     public async Task<CreateQuestionCommandResponse> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
     {
-        await _questionService.CreateQuestion(request);
-        return new();
+        var questionId = await _questionService.CreateQuestion(request);
+        return new()
+        {
+            QuestionId = questionId,
+        };
     }
 }

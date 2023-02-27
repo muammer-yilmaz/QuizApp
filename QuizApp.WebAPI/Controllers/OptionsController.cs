@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Features.Option.Commands.CreateOption;
 using QuizApp.Application.Features.Option.Commands.DeleteOption;
 using QuizApp.Application.Features.Option.Commands.UpdateAnswer;
@@ -17,7 +18,7 @@ public class OptionsController : ApiController
     {
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpGet("[action]")]
     public async Task<ActionResult<GetOptionListQueryResponse>> GetOptionListOwner([FromQuery] string questionId)
     {
@@ -25,7 +26,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPost("[action]")]
     public async Task<ActionResult<CreateOptionCommandResponse>> Create([FromBody] CreateOptionCommand request)
     {
@@ -33,7 +34,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpDelete("[action]/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -42,7 +43,7 @@ public class OptionsController : ApiController
         return NoContent();
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateOptionCommandResponse>> Update([FromBody] UpdateOptionCommand request)
     {
@@ -50,7 +51,7 @@ public class OptionsController : ApiController
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateAnswerCommandResponse>> UpdateAnswer([FromBody] UpdateAnswerCommand request)
     {

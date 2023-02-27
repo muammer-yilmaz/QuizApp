@@ -8,13 +8,13 @@ namespace QuizApp.Application.Services;
 
 public interface IQuizService
 {
-    public Task CreateQuizAsync(CreateQuizCommand request);
+    public Task<string> CreateQuizAsync(CreateQuizCommand request);
     public Task DeleteQuizAsync(string id);
     public Task UpdateQuizAsync(UpdateQuizCommand request);
     public Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request);
     public Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination);
     public Task<QuizDetailsDto> GetQuizDetailsAsync(string quizId);
-    public Task<GetUserQuizzesQueryResponse> GetUserQuizzesAsync();
+    public Task<List<QuizInfoDto>> GetUserQuizzesAsync();
     public Task<bool> CheckOwnerShip(string quizId);
     public Task<int> CalculateScore(string quizId);
 }

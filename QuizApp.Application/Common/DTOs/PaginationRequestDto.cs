@@ -14,7 +14,7 @@ public class PaginationRequestDto
     public PaginationRequestDto(int page = 1, int pageSize = 10)
     {
         Page = page < 1 ? 1 : page;
-        PageSize = Enum.IsDefined(typeof(PageSizeOption),pageSize) ? (PageSizeOption) pageSize : PageSizeOption.Ten;
+        PageSize = Enum.IsDefined(typeof(PageSizeOption), pageSize) ? (PageSizeOption)pageSize : PageSizeOption.Ten;
     }
 }
 

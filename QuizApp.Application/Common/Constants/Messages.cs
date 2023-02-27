@@ -12,7 +12,7 @@ public static class Messages
 
     public static string GenerateRandomImage(string userId)
         => $"http://api.dicebear.com/5.x/identicon/svg?seed={userId}&size=256";
-
+    public const string SwaggerAuthorizeMessage = "** This action requires Authentication **";
     public const string QuestionOptionMaxed = "A Question can have a maximum of 4 options.";
     public const string QuestionOptionAllFalse = "The question must have at least one correct answer.";
     public const string AddFailure = "Add operation failed.";

@@ -28,16 +28,21 @@ public class QuestionService : IQuestionService
         _quizService = quizService;
     }
 
-    public async Task CreateQuestion(CreateQuestionCommand request)
+    public async Task<string> CreateQuestion(CreateQuestionCommand request)
     {
         await CheckQuestionLimitForQuiz(request.QuizId);
+
         var verifyResult = await VerifyOwnership(request.QuizId);
         if (verifyResult == false)
             throw new AuthorizationException(Messages.UnAuthorizedOperation("quiz", "create question"));
 
         var mapped = _mapper.Map<Question>(request);
+        mapped.Id = Guid.NewGuid().ToString();
+
         await _questionWriteRepository.AddAsync(mapped);
         await _questionWriteRepository.SaveAsync();
+
+        return mapped.Id;
     }
 
     public async Task DeleteQuestion(DeleteQuestionCommand request)
@@ -68,6 +73,7 @@ public class QuestionService : IQuestionService
 
     public async Task<List<QuestionInfoDto>> GetQuestionList(GetQuestionListQuery request)
     {
+        // TODO : Add Ownership later
         var result = await _questionReadRepository.GetAll()
             .Where(p => p.QuizId == request.QuizId)
             .Include(p => p.Options)

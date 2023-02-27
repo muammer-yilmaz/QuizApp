@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.DeleteQuiz;
@@ -11,7 +12,6 @@ using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 using QuizApp.Application.Features.Quiz.Queries.GetQuizDetails;
 using QuizApp.Application.Features.Quiz.Queries.GetUserQuizzes;
-using QuizApp.Application.Features.QuizAttemp.Commands.CreateAttempt;
 using QuizApp.Application.Repositories;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -27,9 +27,9 @@ public class QuizzesController : ApiController
 
     [HttpGet("[action]")]
     [SwaggerOperation(Summary = "** Pagination **")]
-    public async Task<ActionResult<GetAllQuizzesQueryResponse>> GetQuizList([FromQuery] PaginationRequestDto pagination)
+    public async Task<ActionResult<GetAllQuizzesQueryResponse>> GetQuizList([FromQuery] int Page, [FromQuery] PageSizeOption PageSize)
     {
-        GetAllQuizzesQuery query = new(String.Empty, pagination);
+        GetAllQuizzesQuery query = new(String.Empty, new PaginationRequestDto(Page,(int)PageSize));
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -43,6 +43,7 @@ public class QuizzesController : ApiController
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = "!! DEVELOPMENT ONLY !!")]
     [HttpGet("[action]")]
     public async Task<ActionResult<GetQuizDetailsQueryResponse>> GetQuizDetails([FromQuery] GetQuizDetailsQuery request)
     {
@@ -51,7 +52,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpGet("[action]")]
     public async Task<ActionResult<GetUserQuizzesQueryResponse>> GetUserQuizzes()
     {
@@ -60,7 +61,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPost("[action]")]
     public async Task<ActionResult<CreateQuizCommandResponse>> Create([FromBody] CreateQuizCommand request)
     {
@@ -69,7 +70,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPost("[action]")]
     public async Task<ActionResult<StartQuizCommandResponse>> StartQuiz([FromQuery] string quizId)
     {
@@ -78,7 +79,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPost("[action]")]
     public async Task<ActionResult<FinishQuizCommandResponse>> FinishQuiz([FromBody] FinishQuizCommand request)
     {
@@ -87,7 +88,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpDelete("[action]/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -97,7 +98,7 @@ public class QuizzesController : ApiController
     }
 
     [Authorize]
-    [SwaggerOperation(Summary = "** this action requires Authentication **")]
+    [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]
     [HttpPut("[action]")]
     public async Task<ActionResult<UpdateQuizCommandResponse>> Update([FromBody] UpdateQuizCommand request)
     {

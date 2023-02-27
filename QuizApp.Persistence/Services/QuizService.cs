@@ -29,19 +29,22 @@ public class QuizService : IQuizService
         _httpContext = httpContext;
         _quizReadRepository = quizReadRepository;
     }
-    // TODO : create Id leri dön
-    public async Task CreateQuizAsync(CreateQuizCommand request)
+
+    public async Task<string> CreateQuizAsync(CreateQuizCommand request)
     {
         var mappedQuiz = _mapper.Map<Quiz>(request);
         mappedQuiz.UserId = GetIdFromContext();
 
-        // TODO : Check later
+        // TODO : Check score later
         mappedQuiz.Score = 100;
-        
+        mappedQuiz.Id = Guid.NewGuid().ToString();
+
         var result = await _quizWriteRepository.AddAsync(mappedQuiz);
         if (!result)
             throw new Exception(Messages.AddFailure);
         await _quizWriteRepository.SaveAsync();
+
+        return mappedQuiz.Id;
     }
 
     public async Task DeleteQuizAsync(string id)
@@ -138,26 +141,28 @@ public class QuizService : IQuizService
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Quiz"));
 
+        // TODO : Check categoryname later
+
         var mapped = _mapper.Map<QuizDetailsDto>(result);
         mapped.CategoryName = result?.Category?.CategoryName;
         return mapped;
     }
 
-    public async Task<GetUserQuizzesQueryResponse> GetUserQuizzesAsync()
+    public async Task<List<QuizInfoDto>> GetUserQuizzesAsync()
     {
         var userId = GetIdFromContext();
         var result = await _quizReadRepository.GetWhere(p => p.UserId == userId, false)
+            .Include(p => p.Category)
             .Select(p => new QuizInfoDto
             {
                 QuizId = p.Id,
                 Title = p.Description,
-                Description = p.Description
+                Description = p.Description,
+                CategoryName = p.Category.CategoryName
             })
             .ToListAsync();
-        return new()
-        {
-            Quizzes = result
-        };
+
+        return result;
     }
 
     public async Task<bool> CheckOwnerShip(string quizId)
