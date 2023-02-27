@@ -8,6 +8,7 @@ public class QuizFinishDto
     public List<QuizFinishQuestionsDto> Questions { get; set; }
 }
 
+// Boş gönderilen soruların kontrolü ve diğer güvenli kontorlü yap.
 public class QuizFinishQuestionsDto
 {
     public string QuestionId { get; set; }

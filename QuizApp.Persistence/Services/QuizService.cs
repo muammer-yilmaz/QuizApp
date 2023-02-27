@@ -106,11 +106,19 @@ public class QuizService : IQuizService
     public async Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination)
     {
         var result = await _quizReadRepository.GetAll(false)
+            .Include(p => p.Category)
             .Where(p => p.Title.IndexOf(searchText) >= 0)
             .Skip((pagination.Page - 1) * (int)pagination.PageSize)
             .Take((int)pagination.PageSize)
+            .Select(p => new QuizInfoDto
+            {
+                Description = p.Description,
+                QuizId = p.Id,
+                Title = p.Title,
+                CategoryName = p.Category.CategoryName
+            })
             .ToListAsync();
-        var mapped = _mapper.Map<List<QuizInfoDto>>(result);
+
         var totalCount = await _quizReadRepository.Table.Where(p => p.Title.IndexOf(searchText) >= 0).CountAsync();
         var totalPages = Math.Ceiling(totalCount / (double)pagination.PageSize);
 
@@ -118,7 +126,7 @@ public class QuizService : IQuizService
         {
             Quizzes = new()
             {
-                Records = mapped,
+                Records = result,
                 Page = pagination.Page,
                 PageSize = (int)pagination.PageSize,
                 TotalPages = (int)totalPages
