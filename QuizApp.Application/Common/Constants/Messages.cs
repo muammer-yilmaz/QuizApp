@@ -31,4 +31,5 @@ public static class Messages
     public const string MinimumOptionsForQuestionLimit = "A question must have minimum of 2 options.";
     public const string OptionTrueAnswerDeletionNotAllowed = "True answer for the question cannot be deleted.";
     public const string MaximumQuestionCountForQuiz = "The maximum number of questions this quiz can have has been exceeded.";
+    public const string RefreshTokenExpires = "Refresh token expired";
 }

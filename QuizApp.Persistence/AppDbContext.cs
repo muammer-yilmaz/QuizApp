@@ -18,6 +18,7 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
     public DbSet<Option> Options { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
 

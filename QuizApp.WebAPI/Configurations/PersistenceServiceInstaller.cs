@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities.Identity;
@@ -48,6 +47,9 @@ public static class PersistenceServiceInstaller
         services.AddScoped<IQuizAttemptWriteRepository, QuizAttemptWriteRepository>();
         services.AddScoped<IQuizAttemptReadRepository, QuizAttemptReadRepository>();
 
+        services.AddScoped<IRefreshTokenReadRepository, RefreshTokenReadRepository>();
+        services.AddScoped<IRefreshTokenWriteRepository,RefreshTokenWriteRepository>();
+
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
@@ -56,5 +58,6 @@ public static class PersistenceServiceInstaller
         services.AddScoped<IQuestionService, QuestionService>();
         services.AddScoped<IOptionService, OptionService>();
         services.AddScoped<IQuizAttemptService, QuizAttemptService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
     }
 }

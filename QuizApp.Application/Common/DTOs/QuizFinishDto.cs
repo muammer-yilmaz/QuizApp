@@ -1,4 +1,6 @@
-﻿namespace QuizApp.Application.Common.DTOs;
+﻿using System.Text.Json.Serialization;
+
+namespace QuizApp.Application.Common.DTOs;
 
 public class QuizFinishDto
 {

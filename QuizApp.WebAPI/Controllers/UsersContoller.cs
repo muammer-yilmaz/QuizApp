@@ -12,7 +12,6 @@ using QuizApp.Application.Features.User.Queries.GetAllUsers;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Domain.Entities.Identity;
 using Swashbuckle.AspNetCore.Annotations;
-using System.ComponentModel.DataAnnotations;
 
 namespace QuizApp.WebAPI.Controllers;
 
@@ -91,7 +90,7 @@ public class UsersController : ApiController
         if (result.Succeeded)
         {
             var isDeleted = await _imageService.DeleteImage(userId);
-            return isDeleted ? NoContent() : BadRequest();
+            return isDeleted ? NoContent() : BadRequest("Image delete failed");
         }
         return BadRequest();
     }

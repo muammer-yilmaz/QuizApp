@@ -2,7 +2,12 @@
 
 public class PaginationRequestDto
 {
-    public int Page { get; set; }
+    private int _page;
+    public int Page
+    {
+        get => _page;
+        set => _page = value <= 0 ? 1 : value;
+    }
     public PageSizeOption PageSize { get; set; }
 
     public PaginationRequestDto()

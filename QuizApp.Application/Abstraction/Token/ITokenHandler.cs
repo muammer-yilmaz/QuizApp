@@ -1,10 +1,14 @@
 ﻿using QuizApp.Application.Common.DTOs;
 using QuizApp.Domain.Entities.Identity;
+using System.Security.Claims;
 
 namespace QuizApp.Application.Abstraction.Token;
 
 public interface ITokenHandler
 {
-    TokenDto CreateToken(AppUser appUser);
-    //JwtSecurityToken ValidateJwtToken(string token);
+    string CreateAccessToken(AppUser? appUser, IEnumerable<Claim>? oldClaims);
+    (string, DateTime) CreateRefreshToken();
+    public IEnumerable<Claim> GetClaimsFromExpiredToken(string token);
+
+
 }

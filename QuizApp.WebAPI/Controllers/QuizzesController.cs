@@ -27,9 +27,9 @@ public class QuizzesController : ApiController
 
     [HttpGet("[action]")]
     [SwaggerOperation(Summary = "** Pagination **")]
-    public async Task<ActionResult<GetAllQuizzesQueryResponse>> GetQuizList([FromQuery] int Page, [FromQuery] PageSizeOption PageSize)
+    public async Task<ActionResult<GetAllQuizzesQueryResponse>> GetQuizList([FromQuery] PaginationRequestDto pagination)
     {
-        GetAllQuizzesQuery query = new(String.Empty, new PaginationRequestDto(Page,(int)PageSize));
+        GetAllQuizzesQuery query = new(pagination);
         var response = await _mediator.Send(query);
         return Ok(response);
     }

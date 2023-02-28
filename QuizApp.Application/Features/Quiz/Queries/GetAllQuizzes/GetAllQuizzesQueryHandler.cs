@@ -15,7 +15,7 @@ public class GetAllQuizzesQueryHandler : IQueryHandler<GetAllQuizzesQuery, GetAl
     public async Task<GetAllQuizzesQueryResponse> Handle(GetAllQuizzesQuery request, CancellationToken cancellationToken)
     {
         GetAllQuizzesQueryResponse response;
-        if (request.SearchText == String.Empty)
+        if (request.SearchText == null)
         {
             response = await _quizService.GetAllQuizzesAsync(request.Pagination);
         }
