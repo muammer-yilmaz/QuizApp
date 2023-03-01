@@ -13,6 +13,6 @@ public class RefreshToken : BaseEntity
     public DateTime TokenExpires { get; set; }
     public string CreatedByIp { get; set; }
     public string? RevokedByIp { get; set; }
-    public string? ReplacedByToken { get; set; }
+    public string? PreviousToken { get; set; }
     public bool IsExpired => TokenExpires <= DateTime.UtcNow;
 }

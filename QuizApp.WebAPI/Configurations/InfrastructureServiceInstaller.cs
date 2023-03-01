@@ -12,7 +12,7 @@ public static class InfrastructureServiceInstaller
 {
     public static void AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
     {
-        services.AddScoped<ITokenHandler, TokenHandler>();
+        services.AddScoped<ITokenService, TokenHandler>();
         services.AddScoped<IImageService, CloudinaryImageService>();
         services.AddScoped<IMailService, MailService>();
 

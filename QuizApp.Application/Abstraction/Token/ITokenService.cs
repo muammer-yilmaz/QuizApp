@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace QuizApp.Application.Abstraction.Token;
 
-public interface ITokenHandler
+public interface ITokenService
 {
     string CreateAccessToken(AppUser? appUser, IEnumerable<Claim>? oldClaims);
     (string, DateTime) CreateRefreshToken();

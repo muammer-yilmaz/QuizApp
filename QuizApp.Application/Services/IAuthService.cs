@@ -13,5 +13,4 @@ public interface IAuthService
     public Task ConfirmMail(ConfirmMailCommand request);
     public Task GetPasswordReset(GetPasswordResetQuery request);
     public Task PasswordResetConfirm(ResetPasswordCommand request);
-    public Task<TokenDto> RefreshToken(RefreshTokenCommand request);
 }

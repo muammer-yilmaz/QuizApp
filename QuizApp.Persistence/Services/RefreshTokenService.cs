@@ -15,9 +15,9 @@ public class RefreshTokenService : IRefreshTokenService
     private readonly IRefreshTokenReadRepository _refreshTokenReadRepository;
     private readonly IRefreshTokenWriteRepository _refreshTokenWriteRepository;
     private IHttpContextAccessor _contextAccessor;
-    private ITokenHandler _tokenHandler;
+    private ITokenService _tokenHandler;
 
-    public RefreshTokenService(IRefreshTokenReadRepository refreshTokenReadRepository, IRefreshTokenWriteRepository refreshTokenWriteRepository, IHttpContextAccessor contextAccessor, ITokenHandler tokenHandler)
+    public RefreshTokenService(IRefreshTokenReadRepository refreshTokenReadRepository, IRefreshTokenWriteRepository refreshTokenWriteRepository, IHttpContextAccessor contextAccessor, ITokenService tokenHandler)
     {
         _refreshTokenReadRepository = refreshTokenReadRepository;
         _refreshTokenWriteRepository = refreshTokenWriteRepository;
@@ -72,7 +72,7 @@ public class RefreshTokenService : IRefreshTokenService
         token.Token = tokenDto.RefreshToken;
         token.TokenExpires = tokenDto.RefreshTokenExpires;
         token.RevokedByIp = GetIpFromContext();
-        token.ReplacedByToken = oldRefreshToken;
+        token.PreviousToken = oldRefreshToken;
 
         _refreshTokenWriteRepository.Update(token);
         await _refreshTokenWriteRepository.SaveAsync();

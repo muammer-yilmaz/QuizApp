@@ -34,6 +34,7 @@ public class OptionService : IOptionService
 
     public async Task CreateOption(CreateOptionCommand request)
     {
+        // TODO : Multiple correct answer support for later maybe :)
         if (request.Options.FindAll(x => x.IsAnswer == true).Count != 1)
             throw new BusinessException(Messages.OptionsCanHaveOnlyOneTrueAnswer);
 

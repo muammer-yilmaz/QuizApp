@@ -5,9 +5,9 @@ namespace QuizApp.WebAPI.Middlewares;
 
 public class AuthenticationMiddleware : IMiddleware
 {
-    private ITokenHandler _tokenHandler;
+    private ITokenService _tokenHandler;
 
-    public AuthenticationMiddleware(ITokenHandler tokenHandler)
+    public AuthenticationMiddleware(ITokenService tokenHandler)
     {
         _tokenHandler = tokenHandler;
     }

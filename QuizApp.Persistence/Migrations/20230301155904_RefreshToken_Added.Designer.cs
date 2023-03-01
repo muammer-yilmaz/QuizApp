@@ -12,7 +12,7 @@ using QuizApp.Persistence;
 namespace QuizApp.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228183756_RefreshToken_Added")]
+    [Migration("20230301155904_RefreshToken_Added")]
     partial class RefreshToken_Added
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,13 +229,10 @@ namespace QuizApp.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePictureUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpires")
-                        .HasColumnType("datetime2");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("https://res.cloudinary.com/dn8tmbsj3/image/upload/v1677684961/profiles/default.png");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
@@ -408,7 +405,7 @@ namespace QuizApp.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReplacedByToken")
+                    b.Property<string>("PreviousToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RevokedByIp")

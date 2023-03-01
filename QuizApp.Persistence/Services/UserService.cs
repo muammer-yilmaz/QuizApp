@@ -45,11 +45,14 @@ public class UserService : IUserService
         var imageUrl = await _imageService.UploadImage(Messages.GenerateRandomImage(user.Id), user.Id);
         user.ProfilePictureUrl = imageUrl;
         var result = await _userManager.CreateAsync(user, request.Password);
-        if (result.Succeeded)
+
+        if (!result.Succeeded)
         {
-            await SendConfirmationEmail(user);
+            await _imageService.DeleteImage(user.Id);
+            throw new IdentityException(result.Errors.ToDictionary(p => p.Code, p => p.Description));
         }
 
+        await SendConfirmationEmail(user);
     }
 
     public async Task<GetUserQueryResponse> GetUserById(GetUserQuery request)
@@ -80,7 +83,7 @@ public class UserService : IUserService
 
         user.FirstName = request.FirstName ?? user.FirstName;
         user.LastName = request.LastName ?? user.LastName;
-        user.Biography = request.Biography ?? user.Biography ;
+        user.Biography = request.Biography ?? user.Biography;
 
         await _userManager.UpdateAsync(user);
     }
@@ -89,17 +92,18 @@ public class UserService : IUserService
     {
         var user = await CheckUserWithId(GetIdFromContext());
         var result = await _userManager.ChangePasswordAsync(user, request.oldPassword, request.newPassword);
+
         if (result.Succeeded)
-        {
             return;
-        }
+
         var errors = result.Errors.ToDictionary(x => x.Code, x => x.Description);
         throw new IdentityException(errors);
     }
+
     public async Task UploadProfilePicture(UploadImageCommand request)
     {
         var userId = GetIdFromContext();
-        var uploadResponse = await _imageService.UploadImage(request.image,userId);
+        var uploadResponse = await _imageService.UploadImage(request.image, userId);
         var user = await _userManager.FindByIdAsync(userId);
         user.ProfilePictureUrl = uploadResponse;
         await _userManager.UpdateAsync(user);
@@ -120,32 +124,35 @@ public class UserService : IUserService
     private async Task CheckIfAccountRegistered(string email, string userName)
     {
         var result = await _userManager.Users
-            .Where(p => p.UserName == userName)
-            .Where(p => p.Email == email)
+            .Where(p => p.UserName == userName || p.Email == email)
             .FirstOrDefaultAsync();
         if (result != null)
-        {
-            throw new BusinessException(Messages.DuplicateObject("Email or Username"));
-        }
+            throw new BusinessException(Messages.DuplicateObject(
+                (result.UserName == userName && result.Email == email)
+                ? "Username and Email"
+                : result.Email == email
+                ? "Email"
+                : "Username"
+                ));
     }
 
     private string GetIdFromContext()
     {
-        string userId = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication).Value;
+        string? userId = _httpContext?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Authentication)?.Value;
+
         if (userId == null)
-        {
             throw new AuthorizationException(Messages.NoAuth);
-        }
+
         return userId;
     }
 
     private async Task<AppUser> CheckUserWithId(string id)
     {
         var result = await _userManager.FindByIdAsync(id);
+
         if (result == null)
-        {
             throw new NotFoundException("User");
-        }
+
         return result;
     }
 
@@ -156,4 +163,5 @@ public class UserService : IUserService
         user.Score += score;
         await _userManager.UpdateAsync(user);
     }
+
 }

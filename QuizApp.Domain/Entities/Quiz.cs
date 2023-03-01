@@ -11,8 +11,9 @@ public class Quiz : BaseEntity
     public string UserId { get; set; }
     [JsonIgnore]
     public AppUser User { get; set; }
-    public int Score { get; set; } = 0;
+    public int Score { get; set; }
     public string CategoryId { get; set; }
+    [JsonIgnore]
     public Category Category { get; set; }
     public bool IsVisible { get; set; }
     public ICollection<Question> Questions { get; set; }

@@ -7,7 +7,6 @@ using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Quiz.Commands.CreateQuiz;
 using QuizApp.Application.Features.Quiz.Commands.UpdateQuiz;
 using QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
-using QuizApp.Application.Features.Quiz.Queries.GetUserQuizzes;
 using QuizApp.Application.Repositories;
 using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
@@ -72,21 +71,12 @@ public class QuizService : IQuizService
         await _quizWriteRepository.SaveAsync();
     }
 
+    // TODO : Response return change later
     public async Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request)
     {
-        var result = await _quizReadRepository.GetAll(false)
-            .Include(p => p.Category)
-            .Skip((request.Page - 1) * (int)request.PageSize)
-            .Take((int)request.PageSize)
-            .Select(p => new QuizInfoDto
-            {
-                Description = p.Description,
-                QuizId = p.Id,
-                Title = p.Title,
-                CategoryName = p.Category.CategoryName
-            })
-            .ToListAsync();
-        //var mapped = _mapper.Map<List<QuizInfoDto>>(result);
+        var query = GetAllQuizzesQueryPagination(request);
+        var result = await query.ToListAsync();
+        
         var totalCount = await _quizReadRepository.Table.CountAsync();
         var totalPages = Math.Ceiling(totalCount / (double)request.PageSize);
 
@@ -105,18 +95,9 @@ public class QuizService : IQuizService
 
     public async Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination)
     {
-        var result = await _quizReadRepository.GetAll(false)
-            .Include(p => p.Category)
+        var query = GetAllQuizzesQueryPagination(pagination);
+        var result = await query
             .Where(p => p.Title.IndexOf(searchText) >= 0)
-            .Skip((pagination.Page - 1) * (int)pagination.PageSize)
-            .Take((int)pagination.PageSize)
-            .Select(p => new QuizInfoDto
-            {
-                Description = p.Description,
-                QuizId = p.Id,
-                Title = p.Title,
-                CategoryName = p.Category.CategoryName
-            })
             .ToListAsync();
 
         var totalCount = await _quizReadRepository.Table.Where(p => p.Title.IndexOf(searchText) >= 0).CountAsync();
@@ -196,6 +177,26 @@ public class QuizService : IQuizService
         if (userId == null)
             throw new AuthorizationException(Messages.NoAuth);
         return userId;
+    }
+
+    private IQueryable<QuizInfoDto> GetAllQuizzesQueryPagination(PaginationRequestDto request)
+    {
+        var query = _quizReadRepository.GetAll(false)
+            .Include(p => p.Category)
+            .Include(p => p.User)
+            .Skip((request.Page - 1) * (int)request.PageSize)
+            .Take((int)request.PageSize)
+            .Select(p => new QuizInfoDto
+            {
+                Description = p.Description,
+                QuizId = p.Id,
+                Title = p.Title,
+                CategoryName = p.Category.CategoryName,
+                UserName = p.User.UserName,
+                UserPhotoUrl = p.User.ProfilePictureUrl,
+                QuizCreatedDate = p.CreatedDate
+            });
+        return query;
     }
 
     public async Task<int> CalculateScore(string quizId)

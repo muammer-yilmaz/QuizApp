@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using QuizApp.Application.Abstraction.Email;
 using QuizApp.Application.Abstraction.Token;
 using QuizApp.Application.Common.Constants;
@@ -8,7 +6,6 @@ using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
 using QuizApp.Application.Features.Auth.Commands.ConfirmMail;
 using QuizApp.Application.Features.Auth.Commands.Login;
-using QuizApp.Application.Features.Auth.Commands.RefreshToken;
 using QuizApp.Application.Features.Auth.Commands.ResetPassword;
 using QuizApp.Application.Features.Auth.Queries.GetPasswordReset;
 using QuizApp.Application.Services;
@@ -21,12 +18,12 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
-    private readonly ITokenHandler _tokenHandler;
+    private readonly ITokenService _tokenHandler;
     private readonly IMailService _mailService;
 
     public AuthService(UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
-        ITokenHandler tokenHandler,
+        ITokenService tokenHandler,
         IMailService mailService)
     {
         _userManager = userManager;
@@ -116,31 +113,6 @@ public class AuthService : IAuthService
 
         var errors = identityResult.Errors.ToDictionary(x => x.Code, x => x.Description);
         throw new IdentityException(errors);
-    }
-
-    public async Task<TokenDto> RefreshToken(RefreshTokenCommand request)
-    {
-        //var user = await _userManager.Users.FirstOrDefaultAsync(p => p.RefreshToken == request.Token.RefreshToken);
-
-        //if (user == null)
-        //    throw new BusinessException(Messages.NotFound("User with associated Refresh Token"));
-
-        //if (user.RefreshTokenExpires <= DateTime.UtcNow)
-        //    throw new BusinessException(Messages.RefreshTokenExpires);
-
-        ////later for claims and if necessary with ownership control
-
-        ////var userIdFromOldToken = _tokenHandler.ValidateJwtToken(request.Token.AccessToken);
-
-        //var token = _tokenHandler.CreateAccessToken(user);
-
-        //user.RefreshToken = token.RefreshToken;
-        //user.RefreshTokenExpires = token.RefreshTokenExpires;
-
-        //await _userManager.UpdateAsync(user);
-
-        //return token;
-        throw new NotImplementedException();
     }
 
     private string DecodeToken(string token)

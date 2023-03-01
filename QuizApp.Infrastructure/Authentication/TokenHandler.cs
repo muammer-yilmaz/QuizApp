@@ -9,7 +9,7 @@ using System.Text;
 
 namespace QuizApp.Infrastructure.Authentication;
 
-public class TokenHandler : ITokenHandler
+public class TokenHandler : ITokenService
 {
     private readonly IConfiguration _configuration;
 

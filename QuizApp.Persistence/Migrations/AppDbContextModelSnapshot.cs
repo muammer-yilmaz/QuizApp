@@ -227,13 +227,10 @@ namespace QuizApp.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePictureUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpires")
-                        .HasColumnType("datetime2");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("https://res.cloudinary.com/dn8tmbsj3/image/upload/v1677684961/profiles/default.png");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
@@ -406,7 +403,7 @@ namespace QuizApp.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReplacedByToken")
+                    b.Property<string>("PreviousToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RevokedByIp")

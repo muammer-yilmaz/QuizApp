@@ -20,6 +20,14 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<AppUser>()
+            .Property(p => p.ProfilePictureUrl)
+            .HasDefaultValue("https://res.cloudinary.com/dn8tmbsj3/image/upload/v1677684961/profiles/default.png");
+
+        base.OnModelCreating(builder);
+    }
 
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
