@@ -10,7 +10,7 @@ public class JsonTrimConverter : JsonConverter<string?>
         Type typeToConvert,
         JsonSerializerOptions options)
     {
-        return reader.GetString().Trim();
+        return reader.GetString()?.Trim();
     }
 
     public override void Write(
@@ -18,6 +18,6 @@ public class JsonTrimConverter : JsonConverter<string?>
         string? value,
         JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.Trim());
+        writer.WriteStringValue(value?.Trim());
     }
 }

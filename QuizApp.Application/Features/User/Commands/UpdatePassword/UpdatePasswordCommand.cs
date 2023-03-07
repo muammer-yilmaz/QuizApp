@@ -3,6 +3,6 @@
 namespace QuizApp.Application.Features.User.Commands.UpdatePassword;
 
 public sealed record UpdatePasswordCommand(
-    string oldPassword,
-    string newPassword
+    string OldPassword,
+    string NewPassword
     ) : ICommand<UpdatePasswordCommandResponse>;

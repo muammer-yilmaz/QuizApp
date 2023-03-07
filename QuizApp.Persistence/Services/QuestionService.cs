@@ -74,7 +74,7 @@ public class QuestionService : IQuestionService
     public async Task<List<QuestionInfoDto>> GetQuestionList(GetQuestionListQuery request)
     {
         // TODO : Add Ownership later
-        var result = await _questionReadRepository.GetAll()
+        var result = await _questionReadRepository.GetAll(false)
             .Where(p => p.QuizId == request.QuizId)
             .Include(p => p.Options)
             .Select(p => new QuestionInfoDto()
@@ -109,9 +109,13 @@ public class QuestionService : IQuestionService
 
     private async Task<Question> CheckIfQuestionExists(string id)
     {
-        var result = await _questionReadRepository.GetByIdAsync(id);
+        var result = await _questionReadRepository
+            .GetWhere(p => p.Id == id)
+            .FirstOrDefaultAsync();
+
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Question"));
+        
         return result;
     }
 

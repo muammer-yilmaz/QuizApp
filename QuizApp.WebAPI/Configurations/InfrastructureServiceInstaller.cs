@@ -12,7 +12,7 @@ public static class InfrastructureServiceInstaller
 {
     public static void AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
     {
-        services.AddScoped<ITokenService, TokenHandler>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IImageService, CloudinaryImageService>();
         services.AddScoped<IMailService, MailService>();
 
@@ -21,5 +21,6 @@ public static class InfrastructureServiceInstaller
 
         var cloudinaryConfig = configuration.GetSection("Cloudinary").Get<CloudinaryConfigurationDto>();
         services.AddSingleton(cloudinaryConfig);
+
     }
 }

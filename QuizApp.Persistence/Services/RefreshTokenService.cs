@@ -45,9 +45,12 @@ public class RefreshTokenService : IRefreshTokenService
         var token = await _refreshTokenReadRepository.GetAll(false)
             .Where(p => p.Token == tokenDto.RefreshToken)
             .FirstOrDefaultAsync();
+
         if (token == null)
             throw new BusinessException("GetRefreshToken token == null");
-
+        if (token.IsExpired)
+            throw new BusinessException("Token is expired. Login to your account");
+        
         var newRefreshToken = _tokenHandler.CreateRefreshToken();
         var oldClaims = _tokenHandler.GetClaimsFromExpiredToken(tokenDto.AccessToken);
         var newAccessToken = _tokenHandler.CreateAccessToken(null, oldClaims);

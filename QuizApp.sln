@@ -5,15 +5,15 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6FF494A1-C92C-48DA-99CD-C27D750EE0EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.WebAPI", "QuizApp.WebAPI\QuizApp.WebAPI.csproj", "{9AA56758-BC5B-42E4-86A6-03EF6D6F95FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.WebAPI", "QuizApp.WebAPI\QuizApp.WebAPI.csproj", "{9AA56758-BC5B-42E4-86A6-03EF6D6F95FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Domain", "QuizApp.Domain\QuizApp.Domain.csproj", "{4CD00D46-B08B-4161-819B-F663AEB1F1F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Domain", "QuizApp.Domain\QuizApp.Domain.csproj", "{4CD00D46-B08B-4161-819B-F663AEB1F1F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Application", "QuizApp.Application\QuizApp.Application.csproj", "{BD2A2457-4E17-4186-85F7-A8B10E2F503B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Application", "QuizApp.Application\QuizApp.Application.csproj", "{BD2A2457-4E17-4186-85F7-A8B10E2F503B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Infrastructure", "QuizApp.Infrastructure\QuizApp.Infrastructure.csproj", "{4911C10C-64F9-498E-829A-20E0E7A511D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Infrastructure", "QuizApp.Infrastructure\QuizApp.Infrastructure.csproj", "{4911C10C-64F9-498E-829A-20E0E7A511D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Persistence", "QuizApp.Persistence\QuizApp.Persistence.csproj", "{478EAA52-0074-4C07-98B6-6512F091D3CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Persistence", "QuizApp.Persistence\QuizApp.Persistence.csproj", "{478EAA52-0074-4C07-98B6-6512F091D3CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

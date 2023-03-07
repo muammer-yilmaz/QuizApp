@@ -8,6 +8,6 @@ public class CreateQuizCommandValidator : AbstractValidator<CreateQuizCommand>
 	{
 		RuleFor(p => p.Title).NotEmpty();
 		RuleFor(p => p.Description).NotEmpty();
-		
+		RuleFor(p => p.CategoryId).NotEmpty();
 	}
 }

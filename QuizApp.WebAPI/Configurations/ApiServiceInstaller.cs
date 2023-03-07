@@ -29,7 +29,7 @@ public static class ApiServiceInstaller
 
                     ValidAudience = configuration["Token:Audience"],
                     ValidIssuer = configuration["Token:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Token:SecurityKey").Value)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Token:SecurityKey").Value!)),
                 };
                 options.Events = new JwtBearerEvents
                 {

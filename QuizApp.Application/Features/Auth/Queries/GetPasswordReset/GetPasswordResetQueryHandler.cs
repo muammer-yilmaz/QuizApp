@@ -3,11 +3,11 @@ using QuizApp.Application.Services;
 
 namespace QuizApp.Application.Features.Auth.Queries.GetPasswordReset;
 
-public class GetPasswordResetHandler : IQueryHandler<GetPasswordResetQuery, GetPasswordResetQueryResponse>
+public class GetPasswordResetQueryHandler : IQueryHandler<GetPasswordResetQuery, GetPasswordResetQueryResponse>
 {
     private readonly IAuthService _authService;
 
-    public GetPasswordResetHandler(IAuthService authService)
+    public GetPasswordResetQueryHandler(IAuthService authService)
     {
         _authService = authService;
     }

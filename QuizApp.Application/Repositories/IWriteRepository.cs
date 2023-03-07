@@ -1,4 +1,5 @@
-﻿using QuizApp.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizApp.Domain.Common;
 
 namespace QuizApp.Application.Repositories;
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using QuizApp.Application.Common.Constants;
 using QuizApp.Application.Common.DTOs;
 using QuizApp.Application.Common.Exceptions;
@@ -98,7 +97,7 @@ public class OptionService : IOptionService
         if (ownerShipResult == false)
             throw new AuthorizationException(Messages.UnAuthorizedOperation("question", "get options"));
 
-        var result = await _optionReadRepository.GetAll()
+        var result = await _optionReadRepository.GetAll(false)
             .Where(p => p.QuestionId == request.QuestionId)
             .Select(p => new OptionOwnerInfoDto
             {
@@ -135,43 +134,39 @@ public class OptionService : IOptionService
 
     public async Task<List<QuizFinishResultQuestionsDto>> CheckAnswers(List<QuizFinishQuestionsDto> questions)
     {
-
         var finishResult = new List<QuizFinishResultQuestionsDto>();
 
         var questionIds = questions.Select(p => p.QuestionId).ToList();
-        var optionIds = questions.Select(p => p.SelectedOptionId).ToList();
 
         var result = await _optionReadRepository.GetAll(false)
             .Where(p => questionIds.Contains(p.QuestionId))
             .Where(p => p.IsAnswer == true)
             .ToListAsync();
 
-
         foreach (var question in questions)
         {
-            if (result.Any(x => x.QuestionId == question.QuestionId))
+            finishResult.Add(new()
             {
-                finishResult.Add(new()
-                {
-                    Title = question.Title,
-                    Description = question.Description,
-                    SelectedOptionDescription = question.SelectedOptionDescription,
-                    IsCorrect = result
-                        .FirstOrDefault(p => p.QuestionId == question.QuestionId)?.Description == question.SelectedOptionDescription,
-                });
-            }
+                Title = question.Title,
+                Description = question.Description,
+                SelectedOptionDescription = question.SelectedOptionDescription ?? "This question was not answered.",
+                IsCorrect = result
+                    .FirstOrDefault(p => p.QuestionId == question.QuestionId)?.Description == (question.SelectedOptionDescription ?? ""),
+            });
         }
 
-
         return finishResult;
-
     }
 
     private async Task<Option> CheckIfOptionExists(string id)
     {
-        var result = await _optionReadRepository.GetByIdAsync(id);
+        var result = await _optionReadRepository
+            .GetWhere(p => p.Id == id)
+            .FirstOrDefaultAsync();
+
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Option"));
+
         return result;
     }
 

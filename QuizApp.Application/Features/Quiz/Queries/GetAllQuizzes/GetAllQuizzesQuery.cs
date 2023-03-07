@@ -5,6 +5,7 @@ namespace QuizApp.Application.Features.Quiz.Queries.GetAllQuizzes;
 
 public sealed record GetAllQuizzesQuery : IQuery<GetAllQuizzesQueryResponse>
 {
+    // TODO : in c#11 assign to backing field using "field = value.Trim()"
     private string? _searchText;
     public string? SearchText
     {

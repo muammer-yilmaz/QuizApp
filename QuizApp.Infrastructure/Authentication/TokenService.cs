@@ -9,11 +9,11 @@ using System.Text;
 
 namespace QuizApp.Infrastructure.Authentication;
 
-public class TokenHandler : ITokenService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
 
-    public TokenHandler(IConfiguration configuration)
+    public TokenService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -59,7 +59,7 @@ public class TokenHandler : ITokenService
     public (string,DateTime) CreateRefreshToken()
     {
         var refreshToken = GenerateRefreshToken();
-        var refreshTokenExpires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Token:RefreshTokenExpirationInDays"]));
+        var refreshTokenExpires = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["Token:RefreshTokenExpirationInDays"]));
 
         return (refreshToken, refreshTokenExpires);
     }
@@ -90,7 +90,7 @@ public class TokenHandler : ITokenService
             IssuerSigningKey = new SymmetricSecurityKey(secretKey),
             ValidateIssuer = false,
             ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero // set clockskew to zero so token expires instant instead of 5 minutes later
+            ValidateLifetime = false,
         };
 
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);

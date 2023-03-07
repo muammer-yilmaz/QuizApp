@@ -165,15 +165,19 @@ public class QuizService : IQuizService
 
     private async Task<Quiz> CheckIfQuizExists(string quizId)
     {
-        var result = await _quizReadRepository.GetByIdAsync(quizId);
+        var result = await _quizReadRepository
+            .GetWhere(p => p.Id == quizId)
+            .FirstOrDefaultAsync();
+        
         if (result == null)
             throw new NotFoundException(Messages.NotFound("Quiz"));
+        
         return result;
     }
 
     private string GetIdFromContext()
     {
-        var userId = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication).Value;
+        var userId = _httpContext?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Authentication)?.Value;
         if (userId == null)
             throw new AuthorizationException(Messages.NoAuth);
         return userId;

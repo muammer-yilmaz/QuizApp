@@ -1,10 +1,18 @@
 ﻿using QuizApp.Application.Common.Exceptions;
+using Serilog;
 using System.Text.Json;
 
 namespace QuizApp.WebAPI.Middlewares;
 
 public class ExceptionMiddleware : IMiddleware
 {
+    private readonly Serilog.ILogger _logger;
+
+    public ExceptionMiddleware(Serilog.ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -17,10 +25,18 @@ public class ExceptionMiddleware : IMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
         var statusCode = GetStatusCode(exception);
-        object errors = GetValidationErrors(exception);
+        object? errors = GetValidationErrors(exception);
+
+        _logger.Error(
+            "Error of {@ErrorType}, with message {@ErrorMessage}, inner message {@ErrorInnerMessage} , {@DateTimeUtc}"
+            ,exception.GetType().Name,
+            exception.Message,
+            exception.InnerException?.Message,
+            DateTime.UtcNow
+            );
 
         var error = exception.Message;
 
@@ -31,7 +47,6 @@ public class ExceptionMiddleware : IMiddleware
             inner = exception?.InnerException?.Message,
             error = error,
         };
-
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = statusCode;
         await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response,new JsonSerializerOptions
@@ -49,7 +64,7 @@ public class ExceptionMiddleware : IMiddleware
             _ => StatusCodes.Status500InternalServerError
         };
 
-    private static object GetValidationErrors(Exception exception)
+    private static object? GetValidationErrors(Exception exception)
     {
         if (exception is ValidationException validationException)
         {

@@ -8,7 +8,6 @@ using QuizApp.Application.Services;
 using QuizApp.Domain.Entities;
 using System.Security.Claims;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace QuizApp.Persistence.Services;
 
@@ -26,7 +25,7 @@ public class QuizAttemptService : IQuizAttemptService
     }
     public async Task CreateAttempt(string quizId)
     {
-        // TODO : check this fro timed quizzes later
+        // TODO : check this for timed quizzes later
 
         var attempt = await GetAttempt(quizId);
         if(attempt != null)
@@ -60,7 +59,7 @@ public class QuizAttemptService : IQuizAttemptService
 
     }
 
-    private async Task<QuizAttempt> GetAttempt(string quizId)
+    private async Task<QuizAttempt?> GetAttempt(string quizId)
     {
         var userId = GetIdFromContext();
         var attempt = await _quizAttemptReadRepository.GetAll()
@@ -73,7 +72,7 @@ public class QuizAttemptService : IQuizAttemptService
 
     private string GetIdFromContext()
     {
-        var userId = _httpContextAccessor?.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication).Value;
+        var userId = _httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Authentication)?.Value;
         if (userId == null)
             throw new AuthorizationException(Messages.NoAuth);
         return userId;

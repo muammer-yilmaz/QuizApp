@@ -41,7 +41,7 @@ public class CategoryService : ICategoryService
     public async Task<List<CategoryDto>> GetAllCategories(GetAllCategoriesQuery request)
     {
         List<CategoryDto> categories = await _readRepository
-            .GetAll()
+            .GetAll(false)
             .Select(x => new CategoryDto
             {
                 Id = x.Id,

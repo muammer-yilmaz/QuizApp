@@ -91,7 +91,7 @@ public class UserService : IUserService
     public async Task UpdatePassword(UpdatePasswordCommand request)
     {
         var user = await CheckUserWithId(GetIdFromContext());
-        var result = await _userManager.ChangePasswordAsync(user, request.oldPassword, request.newPassword);
+        var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
 
         if (result.Succeeded)
             return;

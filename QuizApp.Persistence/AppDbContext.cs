@@ -6,7 +6,7 @@ using QuizApp.Domain.Entities.Identity;
 
 namespace QuizApp.Persistence;
 
-public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>
+public class AppDbContext : IdentityDbContext<AppUser,AppRole,string>, IDbContext
 {
     public AppDbContext(DbContextOptions options) : base(options)
     {

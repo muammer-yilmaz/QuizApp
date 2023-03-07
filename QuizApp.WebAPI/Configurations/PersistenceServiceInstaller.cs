@@ -16,7 +16,13 @@ public static class PersistenceServiceInstaller
     {
 
         services.AddDbContext<AppDbContext>(
-            options => options.UseSqlServer(configuration.GetConnectionString("SqlServer")));
+            options => options.UseSqlServer(configuration.GetConnectionString("SqlServer"))
+            //options => options.UseNpgsql(configuration["PostgreSql"])
+            );
+
+        //services.AddDbContext<PostgreDbContext>(
+        //    options => options.UseNpgsql(configuration["PostgreSql"])
+        //    );
 
         services.AddIdentity<AppUser, AppRole>(options =>
         {
@@ -48,7 +54,7 @@ public static class PersistenceServiceInstaller
         services.AddScoped<IQuizAttemptReadRepository, QuizAttemptReadRepository>();
 
         services.AddScoped<IRefreshTokenReadRepository, RefreshTokenReadRepository>();
-        services.AddScoped<IRefreshTokenWriteRepository,RefreshTokenWriteRepository>();
+        services.AddScoped<IRefreshTokenWriteRepository, RefreshTokenWriteRepository>();
 
 
         services.AddScoped<IUserService, UserService>();

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace QuizApp.Application.Common.DTOs;
+﻿namespace QuizApp.Application.Common.DTOs;
 
 public class QuizFinishDto
 {
@@ -16,8 +14,8 @@ public class QuizFinishQuestionsDto
     public string QuestionId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public string SelectedOptionId { get; set; }
-    public string SelectedOptionDescription { get; set; }
+    public string? SelectedOptionId { get; set; }
+    public string? SelectedOptionDescription { get; set; }
 }
 
 public class QuizFinishResultDto
