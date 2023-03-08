@@ -9,10 +9,8 @@ namespace QuizApp.WebAPI.Controllers;
 
 public class CategoryController : ApiController
 {
-    private readonly PostgreDbContext context;
-    public CategoryController(IMediator mediator, PostgreDbContext context) : base(mediator)
+    public CategoryController(IMediator mediator) : base(mediator)
     {
-        this.context = context;
     }
 
     [HttpGet("[action]")]
@@ -37,17 +35,17 @@ public class CategoryController : ApiController
         return NoContent();
     }
 
-    [HttpPost("postgre")]
-    public async Task<IActionResult> Ad(string categoryName)
-    {
-        //using PostgreDbContext context;
-        var result = await context.Categories.AddAsync(new Domain.Entities.Category()
-        {
-            CategoryName = categoryName,
-            Id = Guid.NewGuid().ToString()
-        });
-        //await context.SaveChangesAsync();
-        return Ok(result);
-    }
+    //[HttpPost("postgre")]
+    //public async Task<IActionResult> Ad(string categoryName)
+    //{
+    //    //using PostgreDbContext context;
+    //    var result = await context.Categories.AddAsync(new Domain.Entities.Category()
+    //    {
+    //        CategoryName = categoryName,
+    //        Id = Guid.NewGuid().ToString()
+    //    });
+    //    //await context.SaveChangesAsync();
+    //    return Ok(result);
+    //}
 
 }
