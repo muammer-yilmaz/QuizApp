@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Abstraction.File;
 using QuizApp.Application.Common.Constants;
+using QuizApp.Application.Features.QuizAttemp.Queries.GetUserAttempts;
 using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
 using QuizApp.Application.Features.User.Commands.UploadImage;
 using QuizApp.Application.Features.User.Queries.GetAllUsers;
+using QuizApp.Application.Features.User.Queries.GetLeaderboard;
 using QuizApp.Application.Features.User.Queries.GetUser;
 using QuizApp.Domain.Entities.Identity;
 using Swashbuckle.AspNetCore.Annotations;
@@ -50,6 +52,21 @@ public class UsersController : ApiController
     {
         var response = await _mediator.Send(new GetAllUsersQuery());
         return Ok(response);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("[action]")]
+    public async Task<ActionResult<GetLeaderboardQueryResponse>> GetLeaderboard()
+    {
+        var response = await _mediator.Send(new GetLeaderboardQuery());
+        return Ok(response.Leaderboard);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult<GetUserAttemptsQueryResponse>> GetUserAttempts()
+    {
+        var response = await _mediator.Send(new GetUserAttemptsQuery());
+        return Ok(response.Attempts);
     }
 
     [SwaggerOperation(Summary = Messages.SwaggerAuthorizeMessage)]

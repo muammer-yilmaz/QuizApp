@@ -1,4 +1,5 @@
-﻿using QuizApp.Application.Features.User.Commands.CreateUser;
+﻿using QuizApp.Application.Common.DTOs;
+using QuizApp.Application.Features.User.Commands.CreateUser;
 using QuizApp.Application.Features.User.Commands.UpdatePassword;
 using QuizApp.Application.Features.User.Commands.UpdateProfile;
 using QuizApp.Application.Features.User.Commands.UploadImage;
@@ -16,4 +17,5 @@ public interface IUserService
     public Task<GetAllUsersQueryResponse> GetAllUsers(GetAllUsersQuery request);
     public Task UploadProfilePicture(UploadImageCommand request);
     public Task UpdateScore(int score);
+    public Task<List<LeaderboardDto>> GetLeaderboard();
 }

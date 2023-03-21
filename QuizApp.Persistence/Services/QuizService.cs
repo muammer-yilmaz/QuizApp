@@ -145,7 +145,7 @@ public class QuizService : IQuizService
             .Select(p => new QuizInfoDto
             {
                 QuizId = p.Id,
-                Title = p.Description,
+                Title = p.Title,
                 Description = p.Description,
                 CategoryName = p.Category.CategoryName
             })

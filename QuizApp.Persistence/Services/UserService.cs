@@ -164,4 +164,18 @@ public class UserService : IUserService
         await _userManager.UpdateAsync(user);
     }
 
+    public async Task<List<LeaderboardDto>> GetLeaderboard()
+    {
+        var result = await _userManager.Users.Select(p => new LeaderboardDto
+            {
+                UserId = p.Id,
+                Score = p.Score,
+                UserName = p.UserName,
+                UserPhotoUrl = p.ProfilePictureUrl
+            })
+            .OrderByDescending(p => p.Score)
+            .ToListAsync();
+
+        return result;
+    }
 }

@@ -42,6 +42,27 @@ public class QuizAttemptService : IQuizAttemptService
 
     }
 
+    public async Task<List<QuizFinishResultDto>> GetUserAttempts()
+    {
+        var userId = GetIdFromContext();
+        var attemptsJson = await _quizAttemptReadRepository.GetAll(false)
+            .Where(p => p.UserId == userId)
+            .OrderByDescending(p => p.CreatedDate)
+            .Select(p => p.QuizResultJson)
+            .ToListAsync();
+        if (attemptsJson.Count == 0 || attemptsJson == null)
+            throw new NotFoundException(Messages.NotFound("Attempts"));
+
+        List<QuizFinishResultDto> attempts = new();
+
+        attemptsJson.ForEach(p =>
+        {
+            attempts.Add(JsonSerializer.Deserialize<QuizFinishResultDto>(p)!);
+        });
+
+        return attempts;
+    }
+
     public async Task UpdateAttempt(QuizFinishResultDto quizFinishResult)
     {
         // TODO : check for null checks and attempt not found later

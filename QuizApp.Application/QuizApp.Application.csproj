@@ -19,8 +19,4 @@
     <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\QuizAttemp\Queries\" />
-  </ItemGroup>
-
 </Project>
