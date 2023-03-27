@@ -3,7 +3,7 @@
 public class OptionInfoDto
 {
     public string OptionId { get; set; }
-    public string Descripton { get; set; }
+    public string Description { get; set; }
 
 }
 

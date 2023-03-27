@@ -102,7 +102,7 @@ public class OptionService : IOptionService
             .Select(p => new OptionOwnerInfoDto
             {
                 OptionId = p.Id,
-                Descripton = p.Description,
+                Description = p.Description,
                 IsAnswer = p.IsAnswer
             }).ToListAsync();
 

@@ -84,7 +84,7 @@ public class QuestionService : IQuestionService
                 Descripton = p.Description,
                 Options = p.Options.Select(p => new OptionInfoDto
                 {
-                    Descripton = p.Description,
+                    Description = p.Description,
                     OptionId = p.Id
                 }).ToList(),
             })

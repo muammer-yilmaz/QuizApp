@@ -7,7 +7,7 @@ public class UpdateQuestionCommandValidator : AbstractValidator<UpdateQuestionCo
 	public UpdateQuestionCommandValidator()
 	{
 		RuleFor(p => p.Title).NotEmpty();
-		RuleFor(p => p.Descripton).NotEmpty();
+		RuleFor(p => p.Description).NotEmpty();
 		RuleFor(p => p.Id).NotEmpty();
 	}
 }

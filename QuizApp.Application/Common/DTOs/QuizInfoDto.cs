@@ -11,3 +11,13 @@ public class QuizInfoDto
     public DateTime QuizCreatedDate { get; set; }
 
 }
+
+public class UserQuizzesDto
+{
+    public string QuizId { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string CategoryName { get; set; }
+    public DateTime QuizCreatedDate { get; set; }
+
+}

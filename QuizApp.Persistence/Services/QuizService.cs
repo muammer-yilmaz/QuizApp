@@ -137,12 +137,12 @@ public class QuizService : IQuizService
         return mapped;
     }
 
-    public async Task<List<QuizInfoDto>> GetUserQuizzesAsync()
+    public async Task<List<UserQuizzesDto>> GetUserQuizzesAsync()
     {
         var userId = GetIdFromContext();
         var result = await _quizReadRepository.GetWhere(p => p.UserId == userId, false)
             .Include(p => p.Category)
-            .Select(p => new QuizInfoDto
+            .Select(p => new UserQuizzesDto
             {
                 QuizId = p.Id,
                 Title = p.Title,

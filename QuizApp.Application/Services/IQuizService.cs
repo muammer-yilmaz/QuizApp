@@ -14,7 +14,7 @@ public interface IQuizService
     public Task<GetAllQuizzesQueryResponse> GetAllQuizzesAsync(PaginationRequestDto request);
     public Task<GetAllQuizzesQueryResponse> SearchQuizzesAsync(string searchText, PaginationRequestDto pagination);
     public Task<QuizDetailsDto> GetQuizDetailsAsync(string quizId);
-    public Task<List<QuizInfoDto>> GetUserQuizzesAsync();
+    public Task<List<UserQuizzesDto>> GetUserQuizzesAsync();
     public Task<bool> CheckOwnerShip(string quizId);
     public Task<int> CalculateScore(string quizId);
 }
